@@ -1,0 +1,4219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" id="meta-theme-color" content="#08090A"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Tuition"/>
+<title>Tuition Tracker</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════════════════════
+   SECTION 1 — RESET + DESIGN TOKENS
+   ══════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;height:100%;
+  font-family:'Inter',sans-serif;
+  font-size:14px;line-height:1.5;
+  overflow-x:hidden;
+  overscroll-behavior:none;
+}
+
+/* ── THEME: Neon Ledger (default) ──────────────────────── */
+:root,[data-theme="neon"]{
+  --bg:          #08090A;
+  --void:        #0E1215;
+  --surface:     #0E1215;
+  --s-low:       #090D10;
+  --s-mid:       #161D22;
+  --s-high:      #1E2830;
+  --s-highest:   #263240;
+  --border:      rgba(255,255,255,0.09);
+  --border-md:   rgba(255,255,255,0.14);
+  --border-str:  rgba(255,255,255,0.22);
+  --border-top:  rgba(255,255,255,0.18);
+  --text:        #E8EEF2;
+  --text-sec:    #B8C8D4;
+  --text-ter:    #6A8FA3;
+  --silver:      #B8C8D4;
+  --silver-dim:  rgba(184,200,212,0.12);
+  --silver-glow: rgba(184,200,212,0.06);
+  --steel:       #6A8FA3;
+  --steel-dim:   rgba(106,143,163,0.12);
+  --deep:        #3D6478;
+  --deep-dim:    rgba(61,100,120,0.12);
+  --slate:       #4A6070;
+  --slate-dim:   rgba(74,96,112,0.15);
+  --accent:      #B8C8D4;
+  --particle-color: 0xB8C8D4;
+  --r:           2px;
+  --btn-text:    #000;
+  --meta-theme:  #08090A;
+}
+
+/* ── THEME: Midnight Ink ───────────────────────────────── */
+[data-theme="midnight"]{
+  --bg:          #050608;
+  --void:        #0A0B10;
+  --surface:     #0A0B10;
+  --s-low:       #080910;
+  --s-mid:       #12131E;
+  --s-high:      #1A1B2E;
+  --s-highest:   #22243C;
+  --border:      rgba(167,139,250,0.08);
+  --border-md:   rgba(167,139,250,0.14);
+  --border-str:  rgba(167,139,250,0.22);
+  --border-top:  rgba(167,139,250,0.18);
+  --text:        #EDE9FE;
+  --text-sec:    #C4B5FD;
+  --text-ter:    #7C3AED;
+  --silver:      #A78BFA;
+  --silver-dim:  rgba(167,139,250,0.12);
+  --silver-glow: rgba(167,139,250,0.06);
+  --steel:       #6D28D9;
+  --steel-dim:   rgba(109,40,217,0.15);
+  --deep:        #4C1D95;
+  --deep-dim:    rgba(76,29,149,0.15);
+  --slate:       #7C3AED;
+  --slate-dim:   rgba(124,58,237,0.15);
+  --accent:      #A78BFA;
+  --particle-color: 0xC4B5FD;
+  --btn-text:    #fff;
+  --meta-theme:  #050608;
+}
+
+/* ── THEME: Amber Ledger ───────────────────────────────── */
+[data-theme="amber"]{
+  --bg:          #0D0A06;
+  --void:        #120E08;
+  --surface:     #120E08;
+  --s-low:       #0F0B07;
+  --s-mid:       #1C1509;
+  --s-high:      #261C0C;
+  --s-highest:   #30230F;
+  --border:      rgba(245,158,11,0.09);
+  --border-md:   rgba(245,158,11,0.16);
+  --border-str:  rgba(245,158,11,0.24);
+  --border-top:  rgba(245,158,11,0.20);
+  --text:        #FEF3C7;
+  --text-sec:    #FCD34D;
+  --text-ter:    #D97706;
+  --silver:      #F59E0B;
+  --silver-dim:  rgba(245,158,11,0.12);
+  --silver-glow: rgba(245,158,11,0.06);
+  --steel:       #D97706;
+  --steel-dim:   rgba(217,119,6,0.12);
+  --deep:        #B45309;
+  --deep-dim:    rgba(180,83,9,0.12);
+  --slate:       #92400E;
+  --slate-dim:   rgba(146,64,14,0.15);
+  --accent:      #F59E0B;
+  --particle-color: 0xFCD34D;
+  --btn-text:    #000;
+  --meta-theme:  #0D0A06;
+}
+
+/* ── THEME: Daylight ───────────────────────────────────── */
+[data-theme="daylight"]{
+  --bg:          #F8FAFC;
+  --void:        #FFFFFF;
+  --surface:     #FFFFFF;
+  --s-low:       #F1F5F9;
+  --s-mid:       #E2E8F0;
+  --s-high:      #CBD5E1;
+  --s-highest:   #94A3B8;
+  --border:      rgba(0,0,0,0.08);
+  --border-md:   rgba(0,0,0,0.12);
+  --border-str:  rgba(0,0,0,0.20);
+  --border-top:  rgba(0,0,0,0.16);
+  --text:        #0F172A;
+  --text-sec:    #1E3A5F;
+  --text-ter:    #64748B;
+  --silver:      #1E3A5F;
+  --silver-dim:  rgba(30,58,95,0.10);
+  --silver-glow: rgba(30,58,95,0.05);
+  --steel:       #3D6478;
+  --steel-dim:   rgba(61,100,120,0.10);
+  --deep:        #4A6080;
+  --deep-dim:    rgba(74,96,128,0.10);
+  --slate:       #5A7090;
+  --slate-dim:   rgba(90,112,144,0.12);
+  --accent:      #1E3A5F;
+  --particle-color: 0x3D6478;
+  --btn-text:    #fff;
+  --meta-theme:  #F8FAFC;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+.material-symbols-outlined{
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+  font-size:18px;
+  vertical-align:middle;
+  line-height:1;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 2 — SCROLLBAR + THREE.JS LAYER
+   ══════════════════════════════════════════════════════════ */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--s-high);border-radius:0}
+
+#threejs-bg{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;overflow:hidden;
+  transition:opacity 2s ease;
+}
+#threejs-bg.intro{opacity:0.75}
+#threejs-bg.collapsed{opacity:0.45}
+#threejs-bg canvas{width:100%!important;height:100%!important}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 3 — APP SHELL: TOPBAR + BOTTOM NAV
+   ══════════════════════════════════════════════════════════ */
+#app-shell{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  min-height:100dvh;
+}
+
+/* ── TOPBAR ────────────────────────────────────────────── */
+.topbar{
+  display:flex;align-items:center;
+  padding:12px 16px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+  border-bottom:1px solid var(--border);
+  background:rgba(8,9,10,0.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  position:sticky;top:0;z-index:40;
+  gap:10px;
+  flex-shrink:0;
+}
+[data-theme="daylight"] .topbar{background:rgba(248,250,252,0.85)}
+.topbar-brand{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:700;
+  color:var(--silver);
+  letter-spacing:0.1em;text-transform:uppercase;
+}
+.topbar-section{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-ter);
+}
+.topbar-spacer{flex:1}
+.topbar-date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-ter);
+  letter-spacing:0.05em;
+}
+.topbar-actions{display:flex;gap:6px;align-items:center}
+.topbar-btn{
+  background:transparent;border:none;
+  color:var(--text-ter);cursor:pointer;
+  padding:4px;border-radius:var(--r);
+  transition:color 0.15s;
+  display:flex;align-items:center;
+}
+.topbar-btn:hover{color:var(--text)}
+.topbar-btn .material-symbols-outlined{font-size:18px}
+
+/* ── MAIN SCROLL AREA ──────────────────────────────────── */
+.main{
+  flex:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:calc(80px + env(safe-area-inset-bottom));
+  background:transparent;
+  position:relative;
+}
+
+/* ── BOTTOM TAB BAR ────────────────────────────────────── */
+.bottom-nav{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:50;
+  height:calc(64px + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(8,9,10,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border-md);
+  display:flex;align-items:stretch;
+}
+[data-theme="daylight"] .bottom-nav{background:rgba(248,250,252,0.94)}
+.nav-tab{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-ter);
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:600;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 4px;
+  position:relative;
+  transition:color 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  min-width:44px;
+  touch-action:manipulation;
+}
+.nav-tab .material-symbols-outlined{font-size:20px;transition:color 0.15s}
+.nav-tab.active{color:var(--silver)}
+.nav-tab.active::after{
+  content:'';
+  position:absolute;top:0;left:20%;right:20%;
+  height:2px;
+  background:var(--silver);
+  border-radius:0 0 2px 2px;
+}
+/* Centre LOG tab — elevated */
+.nav-tab.tab-log{
+  position:relative;
+}
+.nav-tab.tab-log .tab-log-inner{
+  width:48px;height:48px;
+  border-radius:50%;
+  background:var(--silver);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:-4px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.nav-tab.tab-log .tab-log-inner .material-symbols-outlined{
+  font-size:22px;
+  color:var(--btn-text);
+}
+.nav-tab.tab-log:active .tab-log-inner{transform:scale(0.94)}
+.nav-tab.tab-log.active .tab-log-inner{
+  box-shadow:0 4px 20px rgba(184,200,212,0.3);
+}
+.nav-tab.tab-log::after{display:none}
+.nav-tab .nav-badge{
+  position:absolute;top:8px;right:calc(50% - 14px);
+  background:var(--steel);color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;font-weight:700;
+  padding:0 4px;border-radius:var(--r);
+  min-width:14px;text-align:center;
+  display:none;line-height:14px;height:14px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 4 — SECTIONS
+   ══════════════════════════════════════════════════════════ */
+.section{display:none;padding:16px 16px 24px;animation:fadeIn 0.25s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SECTION HEADER ────────────────────────────────────── */
+.section-hdr{margin-bottom:16px}
+.section-title{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:700;
+  letter-spacing:-0.02em;color:var(--text);
+}
+.section-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--text-ter);
+  letter-spacing:0.08em;margin-top:3px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 5 — GLASS CARD
+   ══════════════════════════════════════════════════════════ */
+.card{
+  background:transparent;
+  border:1px solid var(--border);
+  border-top:1px solid var(--border-str);
+  border-radius:var(--r);
+  padding:16px;
+  position:relative;overflow:hidden;
+  margin-bottom:12px;
+}
+.card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--border-str),transparent,var(--border-str));
+  opacity:0.6;
+}
+.card-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-ter);
+  margin-bottom:12px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 6 — DASHBOARD: HERO + METRICS
+   ══════════════════════════════════════════════════════════ */
+/* Hero: always compact on mobile */
+#hero-banner{
+  background:linear-gradient(135deg,rgba(0,219,233,0.03),transparent);
+  border:1px solid var(--border);
+  border-top:1px solid var(--border-top);
+  padding:14px 16px;
+  margin-bottom:14px;
+  border-radius:var(--r);
+  position:relative;overflow:hidden;
+  cursor:pointer;
+}
+#hero-banner::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(184,200,212,0.4),transparent);
+  opacity:0.4;
+}
+.hero-greeting{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:700;
+  letter-spacing:-0.02em;color:var(--text);
+}
+.hero-greeting span{color:var(--silver)}
+.hero-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--text-ter);
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-top:4px;opacity:0.6;
+}
+
+/* Metrics: horizontal scroll strip */
+.metrics-scroll{
+  display:flex;gap:10px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  margin-bottom:14px;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.metrics-scroll::-webkit-scrollbar{display:none}
+.metric-card{
+  flex-shrink:0;
+  width:150px;
+  scroll-snap-align:start;
+  background:transparent;
+  border:1px solid var(--border);
+  border-top:1px solid var(--border-str);
+  border-radius:var(--r);
+  padding:14px;cursor:pointer;
+  position:relative;overflow:hidden;
+  transition:border-color 0.2s;
+}
+.metric-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-str),transparent);
+}
+.metric-card.outstanding-glow{
+  border-color:rgba(106,143,163,0.25);
+  box-shadow:0 0 16px rgba(106,143,163,0.07);
+}
+.metric-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--text-ter);
+  margin-bottom:6px;
+}
+.metric-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:17px;font-weight:600;
+  color:var(--text);line-height:1.2;
+}
+.metric-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--text-ter);margin-top:2px;
+}
+.metric-sparkline{
+  margin-top:8px;height:24px;display:block;width:100%;
+}
+.goal-bar-wrap{
+  margin-top:6px;height:2px;background:var(--s-high);overflow:hidden;
+}
+.goal-bar-fill{
+  height:100%;background:linear-gradient(90deg,var(--steel),var(--silver));
+  transition:width 0.6s ease;
+}
+.goal-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;color:var(--text-ter);margin-top:2px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 7 — FORM ELEMENTS
+   ══════════════════════════════════════════════════════════ */
+.form-group{margin-bottom:14px}
+.form-label{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-ter);margin-bottom:6px;
+}
+.form-input,.form-select{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--border-md);
+  border-radius:0;
+  padding:11px 0;
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  outline:none;
+  transition:border-color 0.2s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.form-input:focus,.form-select:focus{border-bottom-color:var(--silver)}
+/* Larger touch target for mobile */
+.form-input[type="number"],.form-input[type="date"]{font-size:16px} /* prevent iOS zoom */
+.form-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23849495' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 0 center;
+  padding-right:20px;cursor:pointer;
+}
+.form-select option{background:var(--void);color:var(--text)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 8 — BUTTONS
+   ══════════════════════════════════════════════════════════ */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 16px;
+  border-radius:var(--r);border:none;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:600;
+  letter-spacing:0.04em;
+  cursor:pointer;transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.btn-primary{
+  background:var(--silver);color:var(--btn-text);
+}
+.btn-primary:active{opacity:0.85}
+.btn-ghost{
+  background:transparent;
+  color:var(--text-sec);
+  border:1px solid var(--border-md);
+}
+.btn-ghost:active{background:var(--s-mid)}
+.btn-warn{background:rgba(255,100,100,0.15);color:#ff7070;border:1px solid rgba(255,100,100,0.2)}
+.btn-sm{padding:7px 10px;font-size:11px}
+.btn-sm .material-symbols-outlined{font-size:13px}
+.btn .material-symbols-outlined{font-size:14px}
+/* Full-width log button */
+.btn-log{
+  width:100%;justify-content:center;
+  padding:14px;
+  font-size:13px;
+  margin-top:8px;
+  position:sticky;
+  bottom:calc(80px + env(safe-area-inset-bottom));
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 9 — PAY TOGGLE
+   ══════════════════════════════════════════════════════════ */
+.pay-toggle{
+  display:flex;border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+  height:48px;
+}
+.pay-toggle button{
+  flex:1;padding:0;
+  background:transparent;border:none;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:700;
+  letter-spacing:0.08em;
+  color:var(--text-ter);
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.pay-toggle button.active-paid{background:var(--silver-dim);color:var(--silver)}
+.pay-toggle button.active-unpaid{background:var(--steel-dim);color:var(--steel)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 10 — SESSION LIST (CARDS)
+   ══════════════════════════════════════════════════════════ */
+.session-list{display:flex;flex-direction:column;gap:6px}
+.session-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px;
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  position:relative;
+  overflow:hidden;
+  animation:slideIn 0.2s ease both;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.session-avatar{
+  width:36px;height:36px;
+  border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:700;flex-shrink:0;
+}
+.session-info{flex:1;min-width:0}
+.session-name{
+  font-size:13px;font-weight:600;color:var(--text);
+  cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.session-meta{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-ter);margin-top:1px;
+}
+.session-badges{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
+.session-amount{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:600;
+  color:var(--text);flex-shrink:0;
+  text-align:right;min-width:70px;
+}
+.session-edit,.session-delete{
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-ter);padding:6px;
+  border-radius:var(--r);transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  min-width:32px;min-height:32px;
+  display:flex;align-items:center;justify-content:center;
+}
+.session-edit:active{color:var(--silver);background:var(--silver-dim)}
+.session-delete:active{color:#ff7070;background:rgba(255,100,100,0.1)}
+.session-edit .material-symbols-outlined,
+.session-delete .material-symbols-outlined{font-size:15px}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 11 — BADGES
+   ══════════════════════════════════════════════════════════ */
+.badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  letter-spacing:0.06em;text-transform:uppercase;
+  padding:2px 6px;border-radius:var(--r);
+}
+.badge-paid{background:var(--silver-dim);color:var(--silver)}
+.badge-unpaid{background:var(--steel-dim);color:var(--steel)}
+.badge-individual{background:var(--slate-dim);color:var(--slate)}
+.badge-group{background:rgba(52,53,54,0.8);color:var(--text-ter)}
+.badge[onclick]{cursor:pointer;transition:transform 0.1s}
+.badge[onclick]:active{transform:scale(1.08)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 12 — EMPTY STATE + TOAST
+   ══════════════════════════════════════════════════════════ */
+.empty{
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 16px;gap:8px;color:var(--text-ter);text-align:center;
+}
+.empty .material-symbols-outlined{font-size:28px;opacity:0.3}
+.empty-text{font-size:12px;opacity:0.5}
+
+#toast-container{
+  position:fixed;
+  bottom:calc(80px + env(safe-area-inset-bottom) + 10px);
+  left:16px;right:16px;
+  z-index:9999;
+  display:flex;flex-direction:column;gap:6px;
+}
+.toast{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(20,19,20,0.96);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border-md);
+  border-left:3px solid var(--silver);
+  border-radius:var(--r);
+  padding:11px 14px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 0.25s,transform 0.25s;
+  position:relative;overflow:hidden;
+}
+.toast.show{opacity:1;transform:none}
+.toast-icon{color:var(--silver);font-size:15px;flex-shrink:0;margin-top:1px}
+.toast-icon .material-symbols-outlined{font-size:15px}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text)}
+.toast-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:1px}
+.toast-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--silver);animation:toastBar 3s linear forwards}
+@keyframes toastBar{from{width:100%}to{width:0%}}
+.toast.unpaid-toast{border-left-color:var(--steel)}
+.toast.unpaid-toast .toast-icon,.toast.unpaid-toast .toast-bar{color:var(--steel);background:var(--steel)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 13 — MODALS (full-screen bottom sheets on mobile)
+   ══════════════════════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(8,9,10,0.85);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  display:none;align-items:flex-end;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--void);
+  border:1px solid var(--border-str);
+  border-top:2px solid var(--silver);
+  border-radius:6px 6px 0 0;
+  width:100%;max-width:600px;
+  max-height:92vh;overflow-y:auto;
+  animation:slideUp 0.3s cubic-bezier(0.32,0.72,0,1);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.modal-drag{
+  width:36px;height:4px;border-radius:2px;
+  background:var(--border-str);
+  margin:10px auto 4px;
+}
+.modal-header{
+  display:flex;align-items:center;
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+}
+.modal-title{
+  font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:700;
+  color:var(--text);flex:1;
+}
+.modal-close{
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-ter);padding:4px;
+  border-radius:var(--r);
+  min-width:32px;min-height:32px;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-close:active{background:var(--s-high)}
+.modal-close .material-symbols-outlined{font-size:16px}
+.modal-body{padding:18px}
+.modal-footer{
+  padding:14px 18px;border-top:1px solid var(--border);
+  display:flex;gap:8px;justify-content:flex-end;
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 14 — SETUP OVERLAY
+   ══════════════════════════════════════════════════════════ */
+#setup-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(8,9,10,0.97);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px 16px;
+  padding-bottom:calc(24px + env(safe-area-inset-bottom));
+}
+.setup-card{
+  background:var(--void);
+  border:1px solid var(--border-str);
+  border-top:2px solid var(--silver);
+  border-radius:var(--r);
+  padding:28px 22px;
+  width:100%;max-width:440px;
+}
+.setup-title{
+  font-family:'Inter',sans-serif;
+  font-size:22px;font-weight:700;
+  letter-spacing:-0.02em;color:var(--text);
+  margin-bottom:4px;
+}
+.setup-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--text-ter);
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:24px;
+}
+.subject-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.subject-tag{
+  padding:8px 14px;border-radius:var(--r);
+  border:1px solid var(--border-md);
+  background:transparent;color:var(--text-ter);cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;
+  transition:all 0.15s;letter-spacing:0.06em;
+  -webkit-tap-highlight-color:transparent;
+}
+.subject-tag.selected{background:var(--silver-dim);border-color:var(--silver);color:var(--silver)}
+.add-subject-row{display:flex;gap:8px;margin-top:8px}
+.add-subject-input{
+  flex:1;background:transparent;
+  border:none;border-bottom:1px solid var(--border-md);
+  padding:8px 0;color:var(--text);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  outline:none;
+}
+.add-subject-input:focus{border-bottom-color:var(--silver)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 15 — STUDENT BOTTOM SHEET
+   ══════════════════════════════════════════════════════════ */
+#student-panel{
+  position:fixed;inset:0;z-index:300;
+  display:none;flex-direction:column;
+  background:var(--void);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+#student-panel.open{display:flex}
+.sp-drag{width:36px;height:4px;border-radius:2px;background:var(--border-str);margin:10px auto 6px}
+.sp-header{
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+  flex-shrink:0;
+}
+.sp-avatar{
+  width:40px;height:40px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;font-weight:700;
+}
+.sp-name{
+  font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:700;color:var(--text);flex:1;
+}
+.sp-close{
+  background:transparent;border:none;
+  color:var(--text-ter);cursor:pointer;
+  padding:6px;border-radius:var(--r);
+  min-width:36px;min-height:36px;
+  display:flex;align-items:center;justify-content:center;
+}
+.sp-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  flex-shrink:0;
+}
+.sp-stat{background:var(--void);padding:12px 16px}
+.sp-stat-val{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;color:var(--text)}
+.sp-stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+.sp-sessions{flex:1;overflow-y:auto;padding:14px}
+.sp-sess-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-ter);margin-bottom:10px}
+.sp-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px}
+.sp-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none}
+.sp-tabs::-webkit-scrollbar{display:none}
+.sp-tab{
+  flex:1;background:transparent;border:none;border-bottom:2px solid transparent;
+  padding:11px 8px;cursor:pointer;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--text-ter);
+}
+.sp-tab.active{color:var(--silver);border-bottom-color:var(--silver)}
+.sp-block{margin-bottom:18px}
+.sp-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sp-row:last-child{border-bottom:none}
+.sp-row-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-ter);width:92px;flex-shrink:0}
+.sp-row-val{flex:1;color:var(--text);min-width:0;overflow-wrap:anywhere}
+.sp-notes{font-size:12px;color:var(--text-sec);white-space:pre-wrap;padding:10px;border:1px solid var(--border);border-radius:var(--r)}
+.sp-list-item{padding:10px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px}
+.sp-list-head{display:flex;align-items:center;gap:8px}
+.sp-list-title{font-size:13px;font-weight:600;color:var(--text);flex:1;min-width:0}
+.sp-list-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px}
+.sp-list-body{font-size:12px;color:var(--text-sec);margin-top:6px;white-space:pre-wrap}
+.sp-icon-btn{background:transparent;border:none;color:var(--text-ter);cursor:pointer;padding:4px;min-width:30px;min-height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--r)}
+.sp-icon-btn .material-symbols-outlined{font-size:16px}
+.mark-score{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--silver)}
+.mark-parts{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.mark-part{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-sec)}
+.mark-part-lbl{width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mark-part-bar{flex:1;height:6px;background:var(--s-high);border-radius:var(--r);overflow:hidden}
+.mark-part-fill{height:100%;background:var(--silver)}
+.mark-part-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);width:56px;text-align:right;flex-shrink:0}
+.mark-trend-up{color:#4ade80}
+.mark-trend-down{color:#ff7070}
+.part-row{display:grid;grid-template-columns:1fr 64px 64px 30px;gap:8px;align-items:end;margin-bottom:8px}
+.part-row .form-group{margin-bottom:0}
+.part-total{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-ter);margin:4px 0 12px}
+.part-total.bad{color:#ff7070}
+.modal-overlay.over-panel{z-index:400}
+.form-textarea{resize:vertical;border:1px solid var(--border-md)!important;padding:10px!important;background:var(--void)}
+
+/* Students list */
+.student-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.student-row:last-child{border-bottom:none}
+.student-row-info{flex:1;min-width:0}
+.student-row-name{font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.student-row-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px}
+.clickable-name{cursor:pointer}
+
+/* WhatsApp reminders */
+.rem-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.rem-item:last-child{border-bottom:none}
+.rem-info{flex:1;min-width:0}
+.rem-name{font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rem-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px}
+.btn-wa{background:#25D366;color:#04220f;border:none}
+.rem-sent{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--silver);display:flex;align-items:center;gap:3px}
+.rem-sent .material-symbols-outlined{font-size:14px}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 16 — CALENDAR
+   ══════════════════════════════════════════════════════════ */
+.cal-nav{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.cal-label{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--text);flex:1;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-dow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:600;letter-spacing:0.06em;
+  text-transform:uppercase;color:var(--text-ter);
+  text-align:center;padding:5px 0;
+}
+.cal-cell{
+  aspect-ratio:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:2px;border-radius:var(--r);
+  border:1px solid transparent;
+  cursor:pointer;position:relative;
+  transition:background 0.12s;
+  min-height:40px;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.cal-cell:active{background:var(--s-mid)}
+.cal-cell.today{border-color:var(--silver);background:var(--silver-glow)}
+.cal-cell.selected{background:var(--s-high);border-color:var(--border-md)}
+.cal-cell.has-session{background:var(--silver-dim)}
+.cal-cell.has-recurring{border-style:dashed;border-color:var(--border-md)}
+.cal-cell-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-sec)}
+.cal-cell.today .cal-cell-num{color:var(--silver);font-weight:700}
+.cal-cell.empty-cell{opacity:0.3;cursor:default}
+.cal-dots{display:flex;gap:2px;margin-top:2px}
+.cal-dot{width:3px;height:3px;border-radius:50%;background:var(--silver)}
+.cal-dot.unpaid{background:var(--steel)}
+.cal-rev{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--silver);margin-top:1px}
+/* Day detail bottom sheet */
+.day-detail-wrap{
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:14px;
+  margin-top:12px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 17 — ANALYTICS
+   ══════════════════════════════════════════════════════════ */
+.pills{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pill{
+  flex-shrink:0;
+  padding:6px 14px;border-radius:var(--r);
+  border:1px solid var(--border);
+  background:transparent;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;font-weight:700;
+  color:var(--text-ter);letter-spacing:0.06em;
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill.active{background:var(--silver-dim);border-color:var(--silver);color:var(--silver)}
+.chart-container{height:200px;position:relative;margin-bottom:14px}
+.heatmap-scroll{overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.heatmap-scroll::-webkit-scrollbar{display:none}
+.heatmap-grid{
+  display:grid;
+  grid-template-columns:repeat(53,1fr);
+  gap:2px;
+  min-width:560px;
+}
+.heatmap-cell{
+  width:12px;height:12px;border-radius:1px;
+  background:var(--s-high);transition:background 0.2s;
+}
+.heatmap-cell.lv1{background:rgba(184,200,212,0.2)}
+.heatmap-cell.lv2{background:rgba(184,200,212,0.45)}
+.heatmap-cell.lv3{background:rgba(184,200,212,0.7)}
+.heatmap-cell.lv4{background:var(--silver)}
+.breakdown-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 0;border-bottom:1px solid var(--border);
+}
+.breakdown-item:last-child{border-bottom:none}
+.breakdown-label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-sec)}
+.breakdown-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.breakdown-value{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text)}
+.ranking-bar-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.ranking-bar-row:last-child{border-bottom:none}
+.ranking-bar-name{font-size:12px;color:var(--text-sec);cursor:pointer;flex-shrink:0;width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ranking-bar-bg{flex:1;height:14px;background:var(--s-high);border-radius:var(--r);overflow:hidden;position:relative}
+.ranking-bar-fill{height:100%;background:linear-gradient(90deg,var(--silver-dim),var(--silver));border-radius:var(--r);transition:width 0.8s cubic-bezier(0.34,1.56,0.64,1)}
+.ranking-bar-val{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter);flex-shrink:0;width:65px;text-align:right}
+
+/* Analytics 2-col subject cards */
+.analytics-subject-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 18 — HISTORY (card list instead of table)
+   ══════════════════════════════════════════════════════════ */
+.filter-chips{
+  display:flex;gap:6px;overflow-x:auto;
+  padding-bottom:4px;margin-bottom:14px;
+  scrollbar-width:none;
+}
+.filter-chips::-webkit-scrollbar{display:none}
+.filter-chip{
+  flex-shrink:0;
+  padding:6px 12px;border-radius:var(--r);
+  border:1px solid var(--border);
+  background:transparent;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  color:var(--text-ter);letter-spacing:0.06em;
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.filter-chip.active-chip{background:var(--silver-dim);border-color:var(--silver);color:var(--silver)}
+.filter-selects{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.filter-select-sm{
+  background:transparent;
+  border:1px solid var(--border-md);
+  border-radius:var(--r);
+  padding:7px 24px 7px 10px;
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  outline:none;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23849495' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;
+  cursor:pointer;flex:1;min-width:100px;
+}
+.filter-select-sm option{background:var(--void);color:var(--text)}
+.filter-badge-active{
+  padding:6px 10px;border-radius:var(--r);
+  border:1px solid var(--steel);background:var(--steel-dim);
+  color:var(--steel);font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;cursor:pointer;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 19 — REPORT
+   ══════════════════════════════════════════════════════════ */
+.report-stat-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+}
+.report-stat{
+  background:transparent;border:1px solid var(--border);
+  border-radius:var(--r);padding:14px;
+}
+.report-stat-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600;color:var(--text)}
+.report-stat-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter);letter-spacing:0.08em;text-transform:uppercase;margin-top:3px}
+.report-student-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.report-student-row:last-child{border-bottom:none}
+
+/* Report table (inside scrollable wrapper) */
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:400px}
+thead tr{border-bottom:1px solid var(--border-md)}
+th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-ter);text-align:left;padding:8px 10px;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text-sec)}
+tbody tr:last-child td{border-bottom:none}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 20 — PATTERNS / SCHEDULE
+   ══════════════════════════════════════════════════════════ */
+.pattern-card{
+  display:flex;align-items:center;gap:12px;
+  padding:14px;
+  background:transparent;border:1px solid var(--border);
+  border-radius:var(--r);margin-bottom:8px;
+}
+.pattern-icon{
+  width:36px;height:36px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.pattern-body{flex:1;min-width:0}
+.pattern-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+.pattern-meta{
+  display:flex;flex-wrap:wrap;gap:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--text-ter);
+}
+.pattern-meta span{display:flex;align-items:center;gap:3px}
+.pattern-meta .material-symbols-outlined{font-size:11px}
+.pattern-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.pattern-status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  padding:2px 6px;border-radius:var(--r);letter-spacing:0.06em;
+}
+.pattern-status.active{background:var(--silver-dim);color:var(--silver)}
+.pattern-status.paused{background:var(--s-high);color:var(--text-ter)}
+.suggestion-banner{
+  display:flex;gap:12px;padding:14px;
+  background:rgba(0,219,233,0.04);
+  border:1px solid rgba(0,219,233,0.15);
+  border-radius:var(--r);margin-bottom:8px;
+}
+.s-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.s-desc{font-size:12px;color:var(--text-ter);margin-bottom:8px}
+.s-actions{display:flex;gap:6px}
+.week-proj-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+
+/* ── DOW PICKER ────────────────────────────────────────── */
+.dow-picker{display:flex;gap:4px}
+.dow-btn{
+  width:36px;height:36px;border-radius:var(--r);
+  border:1px solid var(--border);
+  background:transparent;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;color:var(--text-ter);
+  transition:all 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.dow-btn.selected{background:var(--silver-dim);border-color:var(--silver);color:var(--silver)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 21 — QUICK FILL + BACKUP BANNER
+   ══════════════════════════════════════════════════════════ */
+.quickfill-banner{
+  display:none;align-items:center;gap:10px;
+  padding:12px 14px;margin-bottom:14px;
+  background:rgba(184,200,212,0.06);
+  border:1px solid rgba(184,200,212,0.2);
+  border-radius:var(--r);
+}
+.qf-title{font-size:12px;font-weight:600;color:var(--text);flex:1}
+.qf-desc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px}
+.backup-banner{
+  display:none;align-items:center;gap:10px;
+  padding:10px 14px;margin-bottom:12px;
+  background:rgba(255,183,134,0.06);
+  border:1px solid rgba(255,183,134,0.2);
+  border-radius:var(--r);
+}
+.chart-legend{display:flex;gap:14px;margin-bottom:8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter);flex-wrap:wrap}
+.chart-legend span{display:flex;align-items:center;gap:5px}
+.legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.stagger-card{opacity:0;transform:translateY(8px);animation:fadeIn 0.35s ease forwards}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 22 — MORE BOTTOM SHEET (overflow nav)
+   ══════════════════════════════════════════════════════════ */
+#more-sheet{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(8,9,10,0.7);
+  display:none;align-items:flex-end;
+  pointer-events:none;
+}
+#more-sheet.open{pointer-events:auto;}
+#more-sheet.open{display:flex}
+.more-sheet-inner{
+  width:100%;
+  background:var(--void);
+  border-top:1px solid var(--border-str);
+  border-top:2px solid var(--silver);
+  border-radius:6px 6px 0 0;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom));
+  animation:slideUp 0.28s cubic-bezier(0.32,0.72,0,1);
+}
+.more-drag{width:36px;height:4px;border-radius:2px;background:var(--border-str);margin:10px auto 12px}
+.more-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;
+  border-bottom:1px solid var(--border);
+  background:transparent;border-radius:0;border-left:none;border-right:none;
+  width:100%;cursor:pointer;
+  color:var(--text);font-family:'Inter',sans-serif;
+  font-size:14px;font-weight:500;text-align:left;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.more-item:last-child{border-bottom:none}
+.more-item:active{background:var(--s-mid)}
+.more-item .material-symbols-outlined{color:var(--text-ter);font-size:18px;flex-shrink:0}
+
+/* Theme swatches in more sheet */
+.theme-swatches{
+  display:flex;gap:12px;padding:14px 20px;
+  border-bottom:1px solid var(--border);
+  align-items:center;
+}
+.theme-swatch-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:var(--text-ter);
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-right:4px;flex-shrink:0;
+}
+.theme-swatch{
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid transparent;cursor:pointer;
+  transition:border-color 0.15s,transform 0.15s;
+  flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.theme-swatch:active{transform:scale(0.9)}
+.theme-swatch.active-theme{border-color:var(--silver)}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 23 — SETTINGS MODAL
+   ══════════════════════════════════════════════════════════ */
+.settings-section-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-ter);
+  margin:18px 0 8px;padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+}
+.settings-section-title:first-child{margin-top:0}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 24 — INSTALL BANNER
+   ══════════════════════════════════════════════════════════ */
+#install-banner{
+  display:none;
+  position:fixed;bottom:calc(72px + env(safe-area-inset-bottom) + 10px);
+  left:12px;right:12px;z-index:9000;
+  background:var(--s-mid);
+  border:2px solid var(--silver);
+  border-radius:8px;
+  padding:14px 16px;
+  align-items:center;gap:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.7);
+  animation:slideUp 0.35s cubic-bezier(0.32,0.72,0,1);
+}
+#install-banner.show{display:flex}
+.install-text{flex:1;font-size:13px;color:var(--text);line-height:1.4}
+.install-text strong{color:var(--silver);display:block;font-size:14px;margin-bottom:2px}
+
+/* ══════════════════════════════════════════════════════════
+   SECTION 25 — OFFLINE BADGE
+   ══════════════════════════════════════════════════════════ */
+#offline-badge{
+  display:none;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--steel-dim);color:var(--steel);
+  padding:2px 8px;border-radius:var(--r);
+}
+#offline-badge.show{display:inline-block}
+
+</style>
+</head>
+<body>
+
+<!-- THREE.JS BACKGROUND -->
+<div id="threejs-bg" class="intro"></div>
+
+<!-- ══════════════════════════════════════════════════════
+     SETUP OVERLAY
+     ══════════════════════════════════════════════════════ -->
+<div id="setup-overlay" style="display:none">
+  <div class="setup-card">
+    <div class="setup-title">Hello, Teacher.</div>
+    <div class="setup-sub">One-time setup · 30 seconds</div>
+    <div class="form-group">
+      <label class="form-label">Your name</label>
+      <input class="form-input" id="setup-name" placeholder="e.g. Mr. Perera" autocomplete="off"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Currency</label>
+      <select class="form-select" id="setup-currency">
+        <option value="LKR">LKR — Sri Lankan Rupee</option>
+        <option value="USD">USD — US Dollar</option>
+        <option value="GBP">GBP — British Pound</option>
+        <option value="EUR">EUR — Euro</option>
+        <option value="INR">INR — Indian Rupee</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subjects you teach</label>
+      <div class="subject-tags" id="setup-subject-tags">
+        <button class="subject-tag selected" data-subj="Physics">Physics</button>
+        <button class="subject-tag selected" data-subj="Maths">Maths</button>
+        <button class="subject-tag" data-subj="Chemistry">Chemistry</button>
+        <button class="subject-tag" data-subj="Biology">Biology</button>
+        <button class="subject-tag" data-subj="English">English</button>
+      </div>
+      <div class="add-subject-row">
+        <input class="add-subject-input" id="setup-custom-subj" placeholder="Add custom subject..."/>
+        <button class="btn btn-ghost btn-sm" onclick="addCustomSubject()"><span class="material-symbols-outlined">add</span></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Monthly revenue goal (optional)</label>
+      <input class="form-input" id="setup-goal" type="number" inputmode="decimal" placeholder="e.g. 150000"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="completeSetup()">
+      <span class="material-symbols-outlined">arrow_forward</span> Start tracking
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STUDENT PANEL (full-screen)
+     ══════════════════════════════════════════════════════ -->
+<div id="student-panel">
+  <div class="sp-drag"></div>
+  <div class="sp-header">
+    <div class="sp-avatar" id="sp-avatar"></div>
+    <div style="flex:1;min-width:0">
+      <div class="sp-name" id="sp-name-text">Student</div>
+      <div class="sp-sub" id="sp-sub-text"></div>
+    </div>
+    <button class="sp-close" onclick="openStudentModal(currentStudent)" title="Edit profile"><span class="material-symbols-outlined">edit</span></button>
+    <button class="sp-close" onclick="closeStudentPanel()"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="sp-tabs" id="sp-tabs">
+    <button class="sp-tab active" data-tab="overview" onclick="setStudentTab('overview')">Overview</button>
+    <button class="sp-tab" data-tab="lessons" onclick="setStudentTab('lessons')">Lessons</button>
+    <button class="sp-tab" data-tab="marks" onclick="setStudentTab('marks')">Marks</button>
+    <button class="sp-tab" data-tab="payments" onclick="setStudentTab('payments')">Payments</button>
+  </div>
+  <div class="sp-sessions" id="sp-body"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     STUDENT PROFILE MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay over-panel" id="student-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="stm-title">Student profile</div>
+      <button class="modal-close" onclick="closeStudentModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Student name</label><input class="form-input" id="stm-name"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Grade</label><input class="form-input" id="stm-grade" placeholder="e.g. Grade 12"/></div>
+        <div class="form-group"><label class="form-label">School</label><input class="form-input" id="stm-school"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Student WhatsApp number</label><input class="form-input" id="stm-phone" type="tel" inputmode="tel" placeholder="077 123 4567"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Parent name</label><input class="form-input" id="stm-parent"/></div>
+        <div class="form-group"><label class="form-label">Parent phone</label><input class="form-input" id="stm-parent-phone" type="tel" inputmode="tel"/></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Class reminders</label>
+        <div class="pay-toggle">
+          <button id="stm-rem-on" onclick="setStmReminders(true)">On</button>
+          <button id="stm-rem-off" onclick="setStmReminders(false)">Off</button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Notes</label><textarea class="form-input form-textarea" id="stm-notes" rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button id="stm-delete-btn" class="btn btn-warn btn-sm" style="display:none;margin-right:auto" onclick="deleteStudentProfile()">
+        <span class="material-symbols-outlined">delete</span> Delete
+      </button>
+      <button class="btn btn-ghost" onclick="closeStudentModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStudentModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     LESSON MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay over-panel" id="lesson-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="lm-title">Add lesson</div>
+      <button class="modal-close" onclick="closeLessonModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="lm-date" type="date"/></div>
+        <div class="form-group"><label class="form-label">Subject</label><select class="form-select" id="lm-subject"></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Topic / lesson covered</label><input class="form-input" id="lm-topic" placeholder="e.g. Newton's laws of motion"/></div>
+      <div class="form-group"><label class="form-label">Notes / homework (optional)</label><textarea class="form-input form-textarea" id="lm-notes" rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button id="lm-delete-btn" class="btn btn-warn btn-sm" style="display:none;margin-right:auto" onclick="deleteLesson()">
+        <span class="material-symbols-outlined">delete</span> Delete
+      </button>
+      <button class="btn btn-ghost" onclick="closeLessonModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLesson()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MARK MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay over-panel" id="mark-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="mm-title">Add marks</div>
+      <button class="modal-close" onclick="closeMarkModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Test / paper name</label><input class="form-input" id="mm-test" placeholder="e.g. Term test 2"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="mm-date" type="date"/></div>
+        <div class="form-group"><label class="form-label">Subject</label><select class="form-select" id="mm-subject"></select></div>
+      </div>
+      <div class="settings-section-title">Breakdown (sections add up to 100)</div>
+      <div id="mm-parts"></div>
+      <button class="btn btn-ghost btn-sm" onclick="addMarkPartRow()"><span class="material-symbols-outlined">add</span> Add section</button>
+      <div class="part-total" id="mm-parts-total"></div>
+      <div class="form-group" id="mm-total-group">
+        <label class="form-label">Total mark (out of 100)</label>
+        <input class="form-input" id="mm-total" type="number" inputmode="decimal" min="0" max="100"/>
+      </div>
+      <div class="form-group"><label class="form-label">Remarks (optional)</label><input class="form-input" id="mm-notes"/></div>
+    </div>
+    <div class="modal-footer">
+      <button id="mm-delete-btn" class="btn btn-warn btn-sm" style="display:none;margin-right:auto" onclick="deleteMark()">
+        <span class="material-symbols-outlined">delete</span> Delete
+      </button>
+      <button class="btn btn-ghost" onclick="closeMarkModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMark()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SETTINGS MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title">Settings</div>
+      <button class="modal-close" onclick="closeSettings()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-section-title">Profile</div>
+      <div class="form-group">
+        <label class="form-label">Your name</label>
+        <input class="form-input" id="s-name" placeholder="Mr. Perera"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Currency</label>
+        <select class="form-select" id="s-currency">
+          <option value="LKR">LKR</option>
+          <option value="USD">USD</option>
+          <option value="GBP">GBP</option>
+          <option value="EUR">EUR</option>
+          <option value="INR">INR</option>
+        </select>
+      </div>
+      <div class="settings-section-title">Subjects</div>
+      <div class="subject-tags" id="s-subject-tags"></div>
+      <div class="add-subject-row" style="margin-top:8px">
+        <input class="add-subject-input" id="s-custom-subj" placeholder="Add subject..."/>
+        <button class="btn btn-ghost btn-sm" onclick="addSettingsSubject()"><span class="material-symbols-outlined">add</span></button>
+      </div>
+      <div class="settings-section-title">Goals</div>
+      <div class="form-group">
+        <label class="form-label">Monthly revenue goal</label>
+        <input class="form-input" id="s-goal" type="number" inputmode="decimal" placeholder="e.g. 150000"/>
+      </div>
+      <div class="settings-section-title">WhatsApp Reminders</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Remind before class</label>
+          <select class="form-select" id="s-rem-lead">
+            <option value="60">1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="180">3 hours</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country code</label>
+          <input class="form-input" id="s-country" type="tel" inputmode="numeric" placeholder="94"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-input form-textarea" id="s-rem-template" rows="3"></textarea>
+        <div class="sp-sub" style="margin-top:6px">Placeholders: {student} {subject} {time} {day} {teacher}</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeSettings()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     NOTE MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="note-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="note-modal-title">Note</div>
+      <button class="modal-close" onclick="closeNoteModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <textarea class="form-input" id="note-text" rows="5" style="resize:vertical;border:1px solid var(--border-md);padding:10px;background:var(--void)"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNote()">Save note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PATTERN MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="pattern-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add recurring schedule</div>
+      <button class="modal-close" onclick="closePatternModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Student name</label><input class="form-input" id="pm-name"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Subject</label><select class="form-select" id="pm-subject"></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="pm-type" onchange="updatePmMembersVisibility()"><option value="Individual">Individual</option><option value="Group">Group</option></select></div>
+      </div>
+      <div class="form-group" id="pm-members-group" style="display:none">
+        <label class="form-label">Group students (comma separated)</label>
+        <input class="form-input" id="pm-members" placeholder="Nimal Silva, Kasun Perera"/>
+        <div class="sp-sub" style="margin-top:6px">Each student gets their own WhatsApp reminder.</div>
+      </div>
+      <div class="form-group"><label class="form-label">Days of week</label><div class="dow-picker" id="dow-picker"></div></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Fee per session</label><input class="form-input" id="pm-fee" type="number" inputmode="decimal"/></div>
+        <div class="form-group"><label class="form-label">Class time</label><input class="form-input" id="pm-time" type="time"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Start date</label><input class="form-input" id="pm-start" type="date"/></div>
+        <div class="form-group"><label class="form-label">End date (optional)</label><input class="form-input" id="pm-end" type="date"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="modal-delete-btn" class="btn btn-warn btn-sm" style="display:none;margin-right:auto" onclick="deletePatternFromModal()">
+        <span class="material-symbols-outlined">delete</span> Delete
+      </button>
+      <button class="btn btn-ghost" onclick="closePatternModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="savePattern()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SESSION EDIT MODAL
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="session-modal">
+  <div class="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-header">
+      <div class="modal-title">Edit session</div>
+      <button class="modal-close" onclick="closeSessionModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Student name</label><input class="form-input" id="sm-name"/></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="sm-date" type="date"/></div>
+        <div class="form-group"><label class="form-label">Amount</label><input class="form-input" id="sm-amount" type="number" inputmode="decimal"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Subject</label><select class="form-select" id="sm-subject"></select></div>
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="sm-type"><option value="Individual">Individual</option><option value="Group">Group</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Payment</label>
+        <div class="pay-toggle">
+          <button id="sm-paid-btn" onclick="setEditPaid(true)">Paid</button>
+          <button id="sm-unpaid-btn" onclick="setEditPaid(false)">Unpaid</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeSessionModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSessionEdit()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MORE BOTTOM SHEET
+     ══════════════════════════════════════════════════════ -->
+<div id="more-sheet" onclick="closeMoreSheet(event)">
+  <div class="more-sheet-inner">
+    <div class="more-drag"></div>
+    <div class="theme-swatches">
+      <span class="theme-swatch-label">Theme</span>
+      <div class="theme-swatch active-theme" id="swatch-neon" style="background:#0E1215;border-color:var(--silver)" onclick="setTheme('neon')" title="Neon Ledger"></div>
+      <div class="theme-swatch" id="swatch-midnight" style="background:#0A0B10" onclick="setTheme('midnight')" title="Midnight Ink"></div>
+      <div class="theme-swatch" id="swatch-amber" style="background:#120E08" onclick="setTheme('amber')" title="Amber Ledger"></div>
+      <div class="theme-swatch" id="swatch-daylight" style="background:#F8FAFC;border:2px solid #CBD5E1" onclick="setTheme('daylight')" title="Daylight"></div>
+    </div>
+    <button class="more-item" onclick="closeMoreSheet();showSection('students')">
+      <span class="material-symbols-outlined">school</span> Students
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();showSection('patterns')">
+      <span class="material-symbols-outlined">event_repeat</span> Recurring Schedule
+      <span class="nav-badge" id="more-pattern-badge" style="position:static;margin-left:auto;display:none;background:var(--steel);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;padding:1px 6px;border-radius:2px"></span>
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();showSection('history')">
+      <span class="material-symbols-outlined">history</span> All Sessions
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();showSection('report')">
+      <span class="material-symbols-outlined">summarize</span> Monthly Report
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();exportBackup()">
+      <span class="material-symbols-outlined">backup</span> Full Backup (all data)
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();triggerRestoreBackup()">
+      <span class="material-symbols-outlined">settings_backup_restore</span> Restore Backup
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();exportCSV()">
+      <span class="material-symbols-outlined">download</span> Export CSV
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();triggerImportCSV()">
+      <span class="material-symbols-outlined">upload</span> Import CSV
+    </button>
+    <button class="more-item" onclick="closeMoreSheet();openSettings()">
+      <span class="material-symbols-outlined">settings</span> Settings
+    </button>
+    <div class="sp-sub" style="text-align:center;padding:10px 0 0" id="app-version"></div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- INSTALL BANNER -->
+<div id="install-banner">
+  <span class="material-symbols-outlined" style="color:var(--silver);font-size:24px;flex-shrink:0">install_mobile</span>
+  <div class="install-text"><strong>Install Tuition Tracker</strong>Opens fullscreen, works offline</div>
+  <button class="btn btn-primary" id="install-btn" style="flex-shrink:0;padding:11px 20px;font-size:13px;font-weight:700">Install</button>
+  <button class="topbar-btn" id="install-close-btn" style="flex-shrink:0;padding:6px">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+</div>
+
+<!-- CSV import input -->
+<input type="file" id="backup-restore-input" accept=".json,application/json" style="display:none" onchange="restoreBackup(event)"/>
+<input type="file" id="csv-import-input" accept=".csv,text/csv,text/comma-separated-values,text/plain" style="display:none" onchange="importCSV(event)"/>
+
+<!-- ══════════════════════════════════════════════════════
+     APP SHELL
+     ══════════════════════════════════════════════════════ -->
+<div id="app-shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">TT</div>
+    <span class="topbar-section" id="topbar-section-name">DASHBOARD</span>
+    <div id="offline-badge">OFFLINE</div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-date" id="topbar-date"></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-scroll">
+
+    <!-- ── DASHBOARD ──────────────────────────────────── -->
+    <div class="section active" id="section-dashboard">
+      <div id="hero-banner" onclick="collapseHeroNow()">
+        <div class="hero-greeting" id="hero-greeting">Good morning, <span id="hero-name">Teacher</span></div>
+        <div class="hero-sub" id="hero-sub">TUITION REVENUE TRACKER</div>
+      </div>
+
+      <!-- backup reminder -->
+      <div class="backup-banner" id="backup-banner">
+        <span class="material-symbols-outlined" style="color:#ffb786;font-size:16px;flex-shrink:0">warning</span>
+        <span style="font-size:12px;flex:1">7+ days since last export. Back up now.</span>
+        <button class="btn btn-ghost btn-sm" onclick="exportBackup()">Back up</button>
+        <button class="btn btn-ghost btn-sm" onclick="this.closest('.backup-banner').style.display='none'">✕</button>
+      </div>
+
+      <!-- WhatsApp reminders (today's classes) -->
+      <div class="card" id="reminders-card" style="display:none;border-color:rgba(37,211,102,0.35)">
+        <div style="display:flex;align-items:center;margin-bottom:6px">
+          <div class="card-title" style="margin-bottom:0">Today's WhatsApp Reminders</div>
+          <span class="sp-sub" style="margin-left:auto;margin-top:0" id="reminders-count"></span>
+        </div>
+        <div id="reminders-list"></div>
+      </div>
+
+      <!-- Metrics scroll strip -->
+      <div class="metrics-scroll" id="metrics-row">
+        <div class="metric-card stagger-card" style="animation-delay:0ms" onclick="filterByUnpaid(false)">
+          <div class="metric-label">Today</div>
+          <div class="metric-value" id="m-today">LKR 0</div>
+          <div class="metric-sub" id="m-today-s">0 sessions</div>
+          <svg class="metric-sparkline" id="spark-today"></svg>
+        </div>
+        <div class="metric-card stagger-card" style="animation-delay:60ms" onclick="filterByUnpaid(false)">
+          <div class="metric-label">This Week</div>
+          <div class="metric-value" id="m-week">LKR 0</div>
+          <div class="metric-sub" id="m-week-s">0 sessions</div>
+          <svg class="metric-sparkline" id="spark-week"></svg>
+        </div>
+        <div class="metric-card stagger-card" style="animation-delay:120ms" onclick="filterByUnpaid(false)">
+          <div class="metric-label">This Month</div>
+          <div class="metric-value" id="m-month">LKR 0</div>
+          <div class="metric-sub" id="m-month-s">0 sessions</div>
+          <svg class="metric-sparkline" id="spark-month"></svg>
+          <div class="goal-bar-wrap" id="goal-bar-wrap" style="display:none"><div class="goal-bar-fill" id="goal-bar-fill" style="width:0%"></div></div>
+          <div class="goal-label" id="goal-label" style="display:none"></div>
+        </div>
+        <div class="metric-card stagger-card" style="animation-delay:180ms" onclick="filterByUnpaid(false)">
+          <div class="metric-label">All Time</div>
+          <div class="metric-value" id="m-all">LKR 0</div>
+          <div class="metric-sub" id="m-all-s">0 sessions</div>
+          <svg class="metric-sparkline" id="spark-all"></svg>
+        </div>
+        <div class="metric-card stagger-card" style="animation-delay:240ms" id="outstanding-card" onclick="filterByUnpaid(true)">
+          <div class="metric-label">Outstanding</div>
+          <div class="metric-value" id="m-outstanding" style="color:var(--steel)">LKR 0</div>
+          <div class="metric-sub" id="m-outstanding-s">0 unpaid</div>
+          <svg class="metric-sparkline" id="spark-outstanding"></svg>
+        </div>
+      </div>
+
+      <!-- Monthly chart -->
+      <div class="card stagger-card" style="animation-delay:300ms">
+        <div class="card-title">Monthly Revenue</div>
+        <div class="chart-legend" id="dash-chart-legend"></div>
+        <div class="chart-container"><canvas id="dash-chart"></canvas></div>
+      </div>
+
+      <!-- Upcoming classes -->
+      <div class="card stagger-card" style="animation-delay:360ms">
+        <div class="card-title">Upcoming Classes</div>
+        <div id="dash-upcoming"></div>
+      </div>
+
+      <!-- Today's sessions -->
+      <div class="card stagger-card" style="animation-delay:420ms">
+        <div style="display:flex;align-items:center;margin-bottom:12px">
+          <div class="card-title" style="margin-bottom:0">Today's Sessions</div>
+          <div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--silver)" id="today-total">LKR 0</div>
+        </div>
+        <div class="session-list" id="today-list"></div>
+      </div>
+    </div>
+
+    <!-- ── LOG SESSION ────────────────────────────────── -->
+    <div class="section" id="section-log">
+      <div class="section-hdr">
+        <div class="section-title">Log Session</div>
+        <div class="section-sub">RECORD A TUITION SESSION</div>
+      </div>
+
+      <div class="card">
+        <div class="quickfill-banner" id="quickfill-banner">
+          <span class="material-symbols-outlined" style="color:var(--silver);font-size:16px">bolt</span>
+          <div style="flex:1">
+            <div class="qf-title" id="qf-title"></div>
+            <div class="qf-desc" id="qf-desc"></div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="applyQuickFill()">Fill</button>
+          <button class="btn btn-ghost btn-sm" onclick="dismissQuickFill()">Skip</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Student name</label>
+          <input class="form-input" id="f-name" placeholder="Full name" autocomplete="off"
+            list="student-datalist" inputmode="text"/>
+          <datalist id="student-datalist"></datalist>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input class="form-input" id="f-date" type="date" onchange="onDateChange()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Amount</label>
+            <input class="form-input" id="f-amount" type="number" inputmode="decimal" placeholder="0"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-select" id="f-subject"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select class="form-select" id="f-type">
+              <option value="Individual">Individual</option>
+              <option value="Group">Group</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lesson topic (optional)</label>
+          <input class="form-input" id="f-topic" placeholder="Saved to the student's lesson history"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment status</label>
+          <div class="pay-toggle" id="pay-toggle">
+            <button id="paid-btn" onclick="setPaid(true)">Paid</button>
+            <button id="unpaid-btn" onclick="setPaid(false)">Unpaid</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-log" onclick="addSession()">
+          <span class="material-symbols-outlined">add_circle</span> Add Session
+        </button>
+      </div>
+
+      <!-- Today's sessions below form -->
+      <div class="card">
+        <div class="card-title">Today's Sessions</div>
+        <div class="session-list" id="log-today-list"></div>
+      </div>
+    </div>
+
+    <!-- ── CALENDAR ───────────────────────────────────── -->
+    <div class="section" id="section-calendar">
+      <div class="section-hdr">
+        <div class="section-title">Calendar</div>
+        <div class="section-sub">MONTHLY VIEW</div>
+      </div>
+      <div class="card" id="calendar-card">
+        <div class="cal-nav">
+          <button class="btn btn-ghost btn-sm" onclick="changeMonth(-1)">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <div class="cal-label" id="cal-label"></div>
+          <button class="btn btn-ghost btn-sm" onclick="changeMonth(0,'today')">Today</button>
+          <button class="btn btn-ghost btn-sm" onclick="changeMonth(1)">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+        <div class="cal-grid" id="cal-dow-row"></div>
+        <div class="cal-grid" style="margin-top:2px" id="cal-grid"></div>
+      </div>
+      <div id="day-detail"></div>
+    </div>
+
+    <!-- ── SCHEDULE / PATTERNS ────────────────────────── -->
+    <div class="section" id="section-patterns">
+      <div style="display:flex;align-items:center;margin-bottom:16px">
+        <div>
+          <div class="section-title">Recurring Schedule</div>
+          <div class="section-sub">PATTERNS & MANUAL SCHEDULES</div>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openPatternModal(null)">
+          <span class="material-symbols-outlined">add</span> Add
+        </button>
+      </div>
+      <div id="suggestions-container" style="margin-bottom:12px"></div>
+      <div class="card">
+        <div class="card-title">Weekly Projection</div>
+        <div class="week-proj-grid" id="weekly-proj"></div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter);letter-spacing:0.08em">WEEKLY TOTAL</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--silver)" id="proj-weekly-total">LKR 0</span>
+        </div>
+      </div>
+      <div id="patterns-list"></div>
+    </div>
+
+    <!-- ── STUDENTS ───────────────────────────────────── -->
+    <div class="section" id="section-students">
+      <div style="display:flex;align-items:center;margin-bottom:16px">
+        <div>
+          <div class="section-title">Students</div>
+          <div class="section-sub">PROFILES, LESSONS & MARKS</div>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openStudentModal(null)">
+          <span class="material-symbols-outlined">add</span> Add
+        </button>
+      </div>
+      <div class="card">
+        <input class="form-input" id="students-search" placeholder="Search students..." oninput="renderStudents()" style="margin-bottom:6px"/>
+        <div id="students-list"></div>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS ──────────────────────────────────── -->
+    <div class="section" id="section-analytics">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <div>
+          <div class="section-title">Analytics</div>
+          <div class="section-sub">PERFORMANCE INSIGHTS</div>
+        </div>
+        <div class="pills" style="margin-left:auto">
+          <button class="pill active" onclick="setRange(7,this)">7D</button>
+          <button class="pill" onclick="setRange(30,this)">30D</button>
+          <button class="pill" onclick="setRange(90,this)">90D</button>
+          <button class="pill" onclick="setRange(365,this)">1Y</button>
+        </div>
+      </div>
+
+      <div class="analytics-subject-grid" id="analytics-subject-cards"></div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;margin-bottom:10px">
+          <div class="card-title" style="margin-bottom:0">Revenue Trend</div>
+          <div style="margin-left:auto;display:flex;gap:4px">
+            <button class="btn btn-ghost btn-sm" onclick="setChartMode('bar',this)" id="mode-bar">Bar</button>
+            <button class="btn btn-ghost btn-sm" onclick="setChartMode('line',this)" id="mode-line">Line</button>
+          </div>
+        </div>
+        <div class="chart-legend" id="chart-legend-bar"></div>
+        <div class="chart-container"><canvas id="analytics-chart"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Student Ranking</div>
+        <div id="student-ranking"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Activity Heatmap · Past 12 Months</div>
+        <div class="heatmap-scroll"><div class="heatmap-grid" id="heatmap-grid"></div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">By Subject</div>
+        <div id="subject-breakdown"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">By Type</div>
+        <div id="type-breakdown"></div>
+      </div>
+    </div>
+
+    <!-- ── HISTORY ────────────────────────────────────── -->
+    <div class="section" id="section-history">
+      <div class="section-hdr">
+        <div class="section-title">All Sessions</div>
+        <div class="section-sub">COMPLETE SESSION RECORD</div>
+      </div>
+      <div class="filter-selects">
+        <select class="filter-select-sm" id="filter-subject" onchange="renderHistory()">
+          <option value="">All subjects</option>
+        </select>
+        <select class="filter-select-sm" id="filter-type" onchange="renderHistory()">
+          <option value="">All types</option>
+          <option value="Individual">Individual</option>
+          <option value="Group">Group</option>
+        </select>
+        <select class="filter-select-sm" id="filter-paid" onchange="renderHistory()">
+          <option value="">All payments</option>
+          <option value="paid">Paid</option>
+          <option value="unpaid">Unpaid</option>
+        </select>
+      </div>
+      <span id="unpaid-filter-badge" class="filter-badge-active" style="display:none;margin-bottom:12px" onclick="clearUnpaidFilter()">Unpaid only ✕</span>
+      <div id="history-list"></div>
+    </div>
+
+    <!-- ── MONTHLY REPORT ─────────────────────────────── -->
+    <div class="section" id="section-report">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <div style="flex:1">
+          <div class="section-title">Monthly Report</div>
+          <div class="section-sub">PRINTABLE BREAKDOWN</div>
+        </div>
+        <select class="filter-select-sm" id="rep-month" onchange="renderReport()" style="flex:none;width:auto;min-width:90px"></select>
+        <select class="filter-select-sm" id="rep-year" onchange="renderReport()" style="flex:none;width:auto;min-width:70px"></select>
+        <button class="btn btn-ghost btn-sm" id="report-share-btn" onclick="shareReport()">
+          <span class="material-symbols-outlined">share</span>
+        </button>
+      </div>
+      <div class="report-stat-grid" id="report-stats"></div>
+      <div class="card">
+        <div class="card-title">By Student</div>
+        <div id="report-students"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">All Sessions This Month</div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Date</th><th>Student</th><th>Subject</th><th>Type</th><th>Payment</th><th style="text-align:right">Amount</th></tr></thead>
+            <tbody id="report-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main><!-- end .main -->
+
+  <!-- BOTTOM TAB BAR -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="nav-tab active" id="nav-dashboard" onclick="showSection('dashboard')" aria-label="Dashboard">
+      <span class="material-symbols-outlined">grid_view</span>
+      <span>Home</span>
+    </button>
+    <button class="nav-tab" id="nav-calendar" onclick="showSection('calendar')" aria-label="Calendar">
+      <span class="material-symbols-outlined">calendar_month</span>
+      <span>Calendar</span>
+    </button>
+    <!-- Centre LOG tab -->
+    <button class="nav-tab tab-log" id="nav-log" onclick="showSection('log')" aria-label="Log Session">
+      <div class="tab-log-inner">
+        <span class="material-symbols-outlined">add</span>
+      </div>
+      <span style="margin-top:2px">Log</span>
+    </button>
+    <button class="nav-tab" id="nav-analytics" onclick="showSection('analytics')" aria-label="Analytics">
+      <span class="material-symbols-outlined">analytics</span>
+      <span>Analytics</span>
+    </button>
+    <button class="nav-tab" id="nav-more" onclick="openMoreSheet()" aria-label="More">
+      <span class="material-symbols-outlined">menu</span>
+      <span class="nav-badge" id="nav-pattern-badge">0</span>
+      <span>More</span>
+    </button>
+  </nav>
+
+</div><!-- end #app-shell -->
+
+<!-- Charts + 3D background: loaded at end of body so the UI paints instantly
+     even if the CDN is slow/blocked. Code below guards against load failure. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" crossorigin="anonymous" onerror="window._chartFailed=true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.min.js" crossorigin="anonymous" onerror="window._threeFailed=true"></script>
+<script>
+// ══════════════════════════════════════════════════════════
+// JS SECTION 1 — THREE.JS AMBIENT BACKGROUND (mobile-optimised)
+// ══════════════════════════════════════════════════════════
+(function initThreeJS(){
+  const isMobile = navigator.maxTouchPoints > 1;
+  const container = document.getElementById('threejs-bg');
+  const W=()=>window.innerWidth, H=()=>window.innerHeight;
+  let scene,camera,renderer,points,geometry;
+  let state=0, transitionProgress=0;
+  const transitionSpeed=0.005;
+  const particleCount = isMobile ? 1500 : 4000;
+  const positions = new Float32Array(particleCount*3);
+  const brainPos  = new Float32Array(particleCount*3);
+  const earthPos  = new Float32Array(particleCount*3);
+  const galaxyPos = new Float32Array(particleCount*3);
+
+  function getBrainPt(){
+    const u=Math.random(),v=Math.random();
+    const theta=2*Math.PI*u,phi=Math.acos(2*v-1);
+    let x=Math.sin(phi)*Math.cos(theta);
+    let y=Math.sin(phi)*Math.sin(theta);
+    let z=Math.cos(phi);
+    x*=1.2*(0.8+0.2*Math.cos(theta*2));y*=1.5;z*=1.1;
+    const n=Math.sin(x*4)*Math.cos(y*4)*Math.sin(z*4)*0.15;
+    return[x+n,y+n,z+n];
+  }
+  function getEarthPt(){
+    const theta=Math.random()*Math.PI*2,phi=Math.acos(Math.random()*2-1),r=1.6;
+    return[r*Math.sin(phi)*Math.cos(theta),r*Math.sin(phi)*Math.sin(theta),r*Math.cos(phi)];
+  }
+  function getGalaxyPt(){
+    const angle=Math.random()*Math.PI*2,radius=Math.random()*4+0.5,spin=3.0;
+    const x=Math.cos(angle+radius*spin)*radius;
+    const z=Math.sin(angle+radius*spin)*radius;
+    const y=(Math.random()-0.5)*(1/(radius+0.5));
+    return[x,y,z];
+  }
+
+  try{
+    if(typeof THREE==='undefined')throw new Error('three.js not loaded');
+    scene=new THREE.Scene();
+    camera=new THREE.PerspectiveCamera(75,W()/H(),0.1,1000);
+    renderer=new THREE.WebGLRenderer({alpha:true,antialias:!isMobile});
+    renderer.setSize(W(),H());
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile?1.5:2));
+    renderer.domElement.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%';
+    container.appendChild(renderer.domElement);
+
+    for(let i=0;i<particleCount;i++){
+      const bp=getBrainPt();
+      brainPos[i*3]=bp[0];brainPos[i*3+1]=bp[1];brainPos[i*3+2]=bp[2];
+      const ep=getEarthPt();
+      earthPos[i*3]=ep[0];earthPos[i*3+1]=ep[1];earthPos[i*3+2]=ep[2];
+      const gp=getGalaxyPt();
+      galaxyPos[i*3]=gp[0];galaxyPos[i*3+1]=gp[1];galaxyPos[i*3+2]=gp[2];
+      positions[i*3]=bp[0];positions[i*3+1]=bp[1];positions[i*3+2]=bp[2];
+    }
+
+    geometry=new THREE.BufferGeometry();
+    geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    const material=new THREE.PointsMaterial({
+      size: isMobile?0.022:0.018,
+      color:0xB8C8D4,
+      transparent:true,opacity:0.85,
+      blending:THREE.AdditiveBlending
+    });
+    points=new THREE.Points(geometry,material);
+    scene.add(points);
+    scene.add(new THREE.AmbientLight(0xffffff,0.5));
+    camera.position.z=6;
+
+    let time=0, animId;
+    const ease=t=>t<0.5?2*t*t:-1+(4-2*t)*t;
+
+    function animate(){
+      animId=requestAnimationFrame(animate);
+      time+=0.01;
+      transitionProgress+=transitionSpeed;
+      if(transitionProgress>=1){transitionProgress=0;state=(state+1)%3;}
+      let src,tgt;
+      if(state===0){src=brainPos;tgt=earthPos;}
+      else if(state===1){src=earthPos;tgt=galaxyPos;}
+      else{src=galaxyPos;tgt=brainPos;}
+      const t=ease(transitionProgress);
+      const pos=geometry.attributes.position.array;
+      for(let i=0;i<particleCount;i++){
+        const idx=i*3;
+        pos[idx]  +=(src[idx]  +(tgt[idx]  -src[idx]  )*t-pos[idx]  )*0.1;
+        pos[idx+1]+=(src[idx+1]+(tgt[idx+1]-src[idx+1])*t-pos[idx+1])*0.1;
+        pos[idx+2]+=(src[idx+2]+(tgt[idx+2]-src[idx+2])*t-pos[idx+2])*0.1;
+      }
+      geometry.attributes.position.needsUpdate=true;
+      points.rotation.y+=0.002;
+      points.rotation.x=Math.sin(time*0.5)*0.1;
+      renderer.render(scene,camera);
+    }
+    animate();
+
+    // Pause when backgrounded — saves battery
+    document.addEventListener('visibilitychange',()=>{
+      if(document.hidden){cancelAnimationFrame(animId);}
+      else{animate();}
+    });
+
+    window.addEventListener('resize',()=>{
+      camera.aspect=W()/H();
+      camera.updateProjectionMatrix();
+      renderer.setSize(W(),H());
+    });
+
+    // Expose material for theme updates
+    window._threeMaterial=material;
+  }catch(e){
+    container.style.background='radial-gradient(ellipse at center,rgba(0,219,233,0.03) 0%,transparent 70%)';
+  }
+})();
+
+// Collapse hero after 3s
+let heroCollapsed=false;
+setTimeout(()=>collapseHero(),3000);
+function collapseHero(){
+  if(heroCollapsed)return;
+  heroCollapsed=true;
+  document.getElementById('threejs-bg').classList.remove('intro');
+  document.getElementById('threejs-bg').classList.add('collapsed');
+}
+function collapseHeroNow(){collapseHero();}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 2 — THEME SYSTEM
+// ══════════════════════════════════════════════════════════
+const THEME_PARTICLES={
+  neon:0xB8C8D4, midnight:0xC4B5FD, amber:0xFCD34D, daylight:0x3D6478
+};
+const THEME_META={
+  neon:'#08090A', midnight:'#050608', amber:'#0D0A06', daylight:'#F8FAFC'
+};
+let currentTheme='neon';
+
+function setTheme(id){
+  currentTheme=id;
+  document.documentElement.dataset.theme=id;
+  // Update meta theme-color
+  const mt=document.getElementById('meta-theme-color');
+  if(mt)mt.content=THEME_META[id]||'#08090A';
+  // Update Three.js particle colour
+  if(window._threeMaterial){
+    window._threeMaterial.color.setHex(THEME_PARTICLES[id]||0xB8C8D4);
+  }
+  // Update swatch borders
+  document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('active-theme'));
+  const sw=document.getElementById('swatch-'+id);
+  if(sw)sw.classList.add('active-theme');
+  // Persist
+  try{localStorage.setItem('tuition_theme',id);}catch(e){}
+}
+
+function loadTheme(){
+  try{
+    const saved=localStorage.getItem('tuition_theme')||'neon';
+    setTheme(saved);
+  }catch(e){}
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 3 — DATA MODEL (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+let sessions  = [];
+let patterns  = [];
+let calNotes  = {};
+let students  = {};   // keyed by student name → profile, lessons, marks
+const APP_VERSION='v7';
+const DEFAULT_REMINDER_TEMPLATE='Hi {student}, this is a reminder that your {subject} class is today at {time}. See you there! – {teacher}';
+let settings  = { teacherName:'', subjects:['Physics','Maths'], monthlyGoal:0, currency:'LKR',
+  reminderLeadMins:120, countryCode:'94', reminderTemplate:DEFAULT_REMINDER_TEMPLATE };
+let calViewDate = new Date();
+let selectedDay = null;
+let analyticsRange = 7;
+let analyticsMode = 'bar';
+let reportMonth = new Date().getMonth();
+let reportYear  = new Date().getFullYear();
+let dashChart = null, analyticsChart = null;
+let editingPatternId = null;
+let editingSessionId = null;
+let editingPaid = true;
+let selectedDow = [];
+let newSessionPaid = false;
+let quickFillData = null;
+let dismissedSuggestions = [];
+let unpaidFilterActive = false;
+
+const MONTHS     = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_F   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS_FULL  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOW_LABELS = ['S','M','T','W','T','F','S'];
+
+const SUBJ_COLORS = [
+  {bg:'rgba(184,200,212,0.12)',c:'#B8C8D4',cls:'physics'},
+  {bg:'rgba(106,143,163,0.12)',c:'#6A8FA3',cls:'maths'},
+  {bg:'rgba(61,100,120,0.12)',c:'#3D6478',cls:'default'},
+  {bg:'rgba(100,116,139,0.15)',c:'#94a3b8',cls:'slate'},
+];
+function subjectColor(subj){
+  const idx=Math.max(0,settings.subjects.indexOf(subj)); // unknown subject → first colour
+  return SUBJ_COLORS[idx%SUBJ_COLORS.length];
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 4 — STORAGE (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function save(){
+  try{
+    const cutoff=Date.now()-48*3600*1000;
+    Object.keys(localStorage).filter(k=>k.startsWith('tuition_snap_')).forEach(k=>{
+      try{const t=parseInt(k.replace('tuition_snap_','').replace('_','')||0);if(t<cutoff)localStorage.removeItem(k);}catch(e){}
+    });
+    const payload={version:2,savedAt:new Date().toISOString(),sessions,patterns,calNotes,students};
+    const raw=JSON.stringify(payload);
+    localStorage.setItem('tuition_v2',raw);
+    localStorage.setItem('tuition_v2_backup',raw);
+    const hourKey='tuition_snap_'+Date.now();
+    try{localStorage.setItem(hourKey,raw);}catch(e){}
+    updateSavedStatus();
+  }catch(e){
+    showToast('save_error','error','Warning','Storage may be full. Export CSV now.','warning');
+  }
+}
+
+function _persistSettings(){
+  localStorage.setItem('tuition_settings',JSON.stringify(settings));
+}
+
+function loadData(){
+  const rawS=localStorage.getItem('tuition_settings');
+  if(rawS){try{settings={...settings,...JSON.parse(rawS)};}catch(e){}}
+
+  const raw=localStorage.getItem('tuition_v2')||localStorage.getItem('tuition_v2_backup');
+  if(raw){
+    try{
+      const d=JSON.parse(raw);
+      sessions=Array.isArray(d.sessions)?d.sessions:[];
+      sessions.forEach(s=>{if(s.paid===undefined)s.paid=true;});
+      patterns=Array.isArray(d.patterns)?d.patterns:[];
+      calNotes=(d.calNotes&&typeof d.calNotes==='object')?d.calNotes:{};
+      students=(d.students&&typeof d.students==='object')?d.students:{};
+      return;
+    }catch(e){}
+  }
+  try{
+    sessions=JSON.parse(localStorage.getItem('tuition_sessions')||'[]');
+    sessions.forEach(s=>{if(s.paid===undefined)s.paid=true;});
+    patterns=JSON.parse(localStorage.getItem('tuition_patterns')||'[]');
+    if(sessions.length||patterns.length){save();}
+  }catch(e){}
+}
+
+function updateSavedStatus(){
+  // PWA has no sidebar status — saved silently
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 5 — UTILITY (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function fmt(n){return settings.currency+' '+Math.round(n).toLocaleString();}
+function dateStr(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function today(){return dateStr(new Date());}
+function sum(arr){return arr.reduce((a,s)=>a+s.amount,0);}
+function pluralSess(n){return n+' session'+(n!==1?'s':'');}
+function initials(name){return name.trim().split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
+function uid(){return Date.now()+Math.random().toString(36).slice(2,6);}
+// Safe JS string argument for inline onclick handlers (handles names like D'Silva)
+function jsArg(str){return "decodeURIComponent('"+encodeURIComponent(String(str)).replace(/'/g,'%27')+"')";}
+function nameClick(name){return `onclick="openStudentPanel(${jsArg(name)})"`;}
+function escHtml(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 6 — TOAST (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function showToast(id,type,title,sub,icon){
+  const existing=document.getElementById('toast-'+id);
+  if(existing)existing.remove();
+  const el=document.createElement('div');
+  el.className='toast'+(type==='unpaid'?' unpaid-toast':'');
+  el.id='toast-'+id;
+  el.innerHTML=`<div class="toast-icon"><span class="material-symbols-outlined">${icon||'info'}</span></div>
+    <div class="toast-body">
+      <div class="toast-title">${escHtml(title)}</div>
+      ${sub?`<div class="toast-sub">${escHtml(sub)}</div>`:''}
+    </div>
+    <div class="toast-bar"></div>`;
+  document.getElementById('toast-container').appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),300);},3500);
+}
+function toast(msg){showToast('gen_'+Date.now(),'info',msg,'','info');}
+function smartSessionToast(s){
+  const isPaid=s.paid!==false;
+  showToast('sess_'+s.id,isPaid?'info':'unpaid',
+    escHtml(s.name),
+    `${s.subject} · ${s.type} · ${fmt(s.amount)} · ${isPaid?'Paid':'Unpaid'}`,
+    'check_circle');
+  // Haptic
+  if(navigator.vibrate)navigator.vibrate(50);
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 7 — SETUP (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function checkSetup(){
+  if(!settings.teacherName){
+    document.getElementById('setup-overlay').style.display='flex';
+  }
+}
+function addCustomSubject(){
+  const input=document.getElementById('setup-custom-subj');
+  const val=input.value.trim();
+  if(!val)return;
+  const tags=document.getElementById('setup-subject-tags');
+  const btn=document.createElement('button');
+  btn.className='subject-tag selected';btn.dataset.subj=val;btn.textContent=val;
+  btn.onclick=()=>btn.classList.toggle('selected');
+  tags.appendChild(btn);input.value='';
+}
+document.getElementById('setup-subject-tags').addEventListener('click',e=>{
+  if(e.target.classList.contains('subject-tag'))e.target.classList.toggle('selected');
+});
+function completeSetup(){
+  const name=document.getElementById('setup-name').value.trim();
+  if(!name){toast('Please enter your name.');return;}
+  const selectedSubjs=[...document.querySelectorAll('#setup-subject-tags .subject-tag.selected')].map(b=>b.dataset.subj);
+  if(!selectedSubjs.length){toast('Please select at least one subject.');return;}
+  settings.teacherName=name;
+  settings.subjects=selectedSubjs;
+  settings.currency=document.getElementById('setup-currency').value;
+  settings.monthlyGoal=parseFloat(document.getElementById('setup-goal').value)||0;
+  _persistSettings();
+  document.getElementById('setup-overlay').style.display='none';
+  rebuildSubjectDropdowns();
+  updateTopbarName();
+  renderDashboard();
+  showToast('setup','info',`Welcome, ${name}!`,'Your tracker is ready.','waving_hand');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 8 — SETTINGS (verbatim from v79, adapted for PWA)
+// ══════════════════════════════════════════════════════════
+function openSettings(){
+  document.getElementById('s-name').value=settings.teacherName;
+  document.getElementById('s-currency').value=settings.currency;
+  document.getElementById('s-goal').value=settings.monthlyGoal||'';
+  document.getElementById('s-rem-lead').value=String(settings.reminderLeadMins||120);
+  document.getElementById('s-country').value=settings.countryCode||'94';
+  document.getElementById('s-rem-template').value=settings.reminderTemplate||DEFAULT_REMINDER_TEMPLATE;
+  buildSettingsSubjectTags();
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+
+function buildSettingsSubjectTags(){
+  const el=document.getElementById('s-subject-tags');
+  el.innerHTML='';
+  const presets=['Physics','Maths','Chemistry','Biology','English','History','ICT'];
+  const all=[...new Set([...presets,...settings.subjects])];
+  all.forEach(s=>{
+    const btn=document.createElement('button');
+    btn.className='subject-tag'+(settings.subjects.includes(s)?' selected':'');
+    btn.dataset.subj=s;btn.textContent=s;
+    btn.onclick=()=>btn.classList.toggle('selected');
+    el.appendChild(btn);
+  });
+}
+function addSettingsSubject(){
+  const input=document.getElementById('s-custom-subj');
+  const val=input.value.trim();if(!val)return;
+  const el=document.getElementById('s-subject-tags');
+  const btn=document.createElement('button');
+  btn.className='subject-tag selected';btn.dataset.subj=val;btn.textContent=val;
+  btn.onclick=()=>btn.classList.toggle('selected');
+  el.appendChild(btn);input.value='';
+}
+function saveSettings(){
+  settings.teacherName=document.getElementById('s-name').value.trim()||settings.teacherName;
+  const cur=document.getElementById('s-currency').value;
+  if(cur) settings.currency=cur;
+  settings.monthlyGoal=parseFloat(document.getElementById('s-goal').value)||0;
+  const sel=[...document.querySelectorAll('#s-subject-tags .subject-tag.selected')].map(b=>b.dataset.subj);
+  if(sel.length)settings.subjects=sel;
+  settings.reminderLeadMins=parseInt(document.getElementById('s-rem-lead').value)||120;
+  settings.countryCode=document.getElementById('s-country').value.replace(/\D/g,'')||'94';
+  settings.reminderTemplate=document.getElementById('s-rem-template').value.trim()||DEFAULT_REMINDER_TEMPLATE;
+  _persistSettings();
+  closeSettings();
+  rebuildSubjectDropdowns();
+  updateTopbarName();
+  renderDashboard();
+  showToast('settings','info','Settings saved','Changes applied.','check_circle');
+}
+
+function rebuildSubjectDropdowns(){
+  ['f-subject','pm-subject','sm-subject','filter-subject','lm-subject','mm-subject'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const isFilter=id==='filter-subject';
+    el.innerHTML=(isFilter?'<option value="">All subjects</option>':'')+
+      settings.subjects.map(s=>`<option value="${s}">${s}</option>`).join('');
+  });
+  // Rebuild student datalist
+  updateStudentDatalist();
+}
+function updateTopbarName(){
+  const greetEl=document.getElementById('hero-name');
+  if(greetEl)greetEl.textContent=settings.teacherName.split(' ')[0]||'Teacher';
+}
+function updateStudentDatalist(){
+  const dl=document.getElementById('student-datalist');
+  if(!dl)return;
+  const names=allStudentNames();
+  dl.innerHTML=names.map(n=>`<option value="${escHtml(n)}">`).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 9 — NAV (adapted for bottom tab bar)
+// ══════════════════════════════════════════════════════════
+const SECTION_NAMES={
+  dashboard:'DASHBOARD',log:'LOG SESSION',calendar:'CALENDAR',
+  patterns:'SCHEDULE',analytics:'ANALYTICS',
+  history:'ALL SESSIONS',report:'MONTHLY REPORT',students:'STUDENTS'
+};
+// Tabs that exist in bottom nav vs more sheet
+const BOTTOM_TAB_IDS=['dashboard','log','calendar','analytics'];
+
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  // Update bottom nav active state
+  document.querySelectorAll('.nav-tab').forEach(n=>n.classList.remove('active'));
+  const navEl=document.getElementById('nav-'+id);
+  if(navEl)navEl.classList.add('active');
+  else{
+    // Sections in More sheet — highlight More tab
+    const moreTab=document.getElementById('nav-more');
+    if(moreTab)moreTab.classList.add('active');
+  }
+  document.getElementById('topbar-section-name').textContent=SECTION_NAMES[id]||id.toUpperCase();
+  // Scroll to top
+  const main=document.getElementById('main-scroll');
+  if(main)main.scrollTo(0,0);
+  // Render section
+  if(id==='dashboard')renderDashboard();
+  if(id==='calendar')renderCalendar();
+  if(id==='analytics')renderAnalytics();
+  if(id==='history')renderHistory();
+  if(id==='patterns')renderPatterns();
+  if(id==='students')renderStudents();
+  if(id==='log'){renderTodayList('log-today-list');checkQuickFill();}
+  if(id==='report'){initReportSelectors();renderReport();}
+}
+
+// ── MORE SHEET ───────────────────────────────────────────
+function openMoreSheet(){document.getElementById('more-sheet').classList.add('open');}
+function closeMoreSheet(e){
+  // Called directly (no event) or user clicked the backdrop
+  if(!e || e.target===document.getElementById('more-sheet')){
+    document.getElementById('more-sheet').classList.remove('open');
+  }
+}
+document.getElementById('more-sheet').querySelector('.more-sheet-inner').addEventListener('click',e=>e.stopPropagation());
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 10 — PAYMENT TOGGLE (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function setPaid(val){
+  newSessionPaid=val;
+  document.getElementById('paid-btn').className=val?'active-paid':'';
+  document.getElementById('unpaid-btn').className=!val?'active-unpaid':'';
+}
+function setEditPaid(val){
+  editingPaid=val;
+  document.getElementById('sm-paid-btn').className=val?'active-paid':'';
+  document.getElementById('sm-unpaid-btn').className=!val?'active-unpaid':'';
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 11 — SESSION CRUD (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function addSession(){
+  const name=document.getElementById('f-name').value.trim();
+  const date=document.getElementById('f-date').value;
+  const subject=document.getElementById('f-subject').value;
+  const type=document.getElementById('f-type').value;
+  const amount=parseFloat(document.getElementById('f-amount').value);
+  if(!name){toast('Enter student name.');return;}
+  if(!date){toast('Select a date.');return;}
+  if(isNaN(amount)||amount<=0){toast('Enter a valid amount.');return;}
+  const s={id:uid(),name,date,subject,type,amount,paid:newSessionPaid};
+  sessions.unshift(s);
+  const topic=document.getElementById('f-topic').value.trim();
+  if(topic)getStudent(name).lessons.unshift({id:uid(),date,subject,topic,notes:''});
+  checkMilestone(s.name);
+  save();
+  clearForm();
+  // Track session count for install prompt
+  try{
+    const ct=parseInt(localStorage.getItem('tuition_session_count_since_open')||0)+1;
+    localStorage.setItem('tuition_session_count_since_open',ct);
+    if(ct===3&&deferredPrompt)showInstallBanner();
+  }catch(e){}
+  renderTodayList('log-today-list');
+  renderTodayList('today-list');
+  updatePatternBadge();
+  updateStudentDatalist();
+  smartSessionToast(s);
+  if(!newSessionPaid)checkGoalProgress(sum(sessions.filter(x=>isThisMonth(x))));
+}
+function isThisMonth(s){
+  const now=new Date();
+  return s.date.startsWith(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`);
+}
+function clearForm(){
+  document.getElementById('f-name').value='';
+  document.getElementById('f-amount').value='';
+  document.getElementById('f-topic').value='';
+  document.getElementById('f-date').value=today();
+  setPaid(false);
+}
+function deleteSession(id){
+  if(!confirm('Delete this session?'))return;
+  sessions=sessions.filter(s=>s.id!==id);
+  save();
+  renderTodayList('log-today-list');
+  renderTodayList('today-list');
+  renderHistory();
+  if(navigator.vibrate)navigator.vibrate([30,20,30]);
+  toast('Session deleted');
+}
+function openSessionModal(id){
+  const s=sessions.find(x=>x.id===id);if(!s)return;
+  editingSessionId=id;
+  document.getElementById('sm-name').value=s.name;
+  document.getElementById('sm-date').value=s.date;
+  document.getElementById('sm-amount').value=s.amount;
+  document.getElementById('sm-subject').value=s.subject;
+  document.getElementById('sm-type').value=s.type;
+  setEditPaid(s.paid!==false);
+  document.getElementById('session-modal').classList.add('open');
+}
+function closeSessionModal(){document.getElementById('session-modal').classList.remove('open');editingSessionId=null;}
+function saveSessionEdit(){
+  const s=sessions.find(x=>x.id===editingSessionId);if(!s)return;
+  s.name=document.getElementById('sm-name').value.trim();
+  s.date=document.getElementById('sm-date').value;
+  s.subject=document.getElementById('sm-subject').value;
+  s.type=document.getElementById('sm-type').value;
+  s.amount=parseFloat(document.getElementById('sm-amount').value);
+  s.paid=editingPaid;
+  if(!s.name||!s.date||isNaN(s.amount)){toast('Fill all fields.');return;}
+  save();closeSessionModal();
+  renderTodayList('log-today-list');renderTodayList('today-list');renderHistory();
+  showToast('edit_'+s.id,'info','Session updated',`${s.name} · ${fmt(s.amount)}`,'edit');
+}
+function togglePaid(id,reopenPanel){
+  const s=sessions.find(x=>x.id===id);if(!s)return;
+  s.paid=!s.paid;save();
+  renderTodayList('today-list');renderTodayList('log-today-list');renderHistory();
+  if(reopenPanel)openStudentPanel(s.name,'payments');
+  showToast('toggle_'+id,s.paid?'paid':'unpaid',
+    s.paid?'Marked as paid':'Marked as unpaid',
+    `${s.name} · ${fmt(s.amount)}`,
+    s.paid?'check_circle':'schedule');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 12 — MILESTONES + GOALS (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+const MILESTONES=[5,10,25,50,100];
+function checkMilestone(name){
+  const count=sessions.filter(s=>s.name===name).length;
+  if(MILESTONES.includes(count)){
+    showToast('milestone_'+name+'_'+count,'info',`Milestone · ${name}`,`${count} sessions logged!`,'emoji_events');
+  }
+}
+function checkGoalProgress(currentMonthTotal){
+  if(!settings.monthlyGoal)return;
+  const pct=currentMonthTotal/settings.monthlyGoal*100;
+  if(pct>=100){showToast('goal_100','info','Monthly goal reached!',`${fmt(currentMonthTotal)} / ${fmt(settings.monthlyGoal)}`,'star');}
+  else if(pct>=75){showToast('goal_75','info','75% of monthly goal',`${fmt(currentMonthTotal)} / ${fmt(settings.monthlyGoal)}`,'trending_up');}
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 13 — SESSION LIST RENDERING (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function renderTodayList(containerId='today-list'){
+  const todaySessions=sessions.filter(s=>s.date===today());
+  const total=sum(todaySessions);
+  const el1=document.getElementById('today-total');
+  if(el1)el1.textContent=fmt(total);
+  renderSessionList(todaySessions,containerId,true);
+}
+function renderSessionList(arr,containerId,withDelete){
+  const el=document.getElementById(containerId);if(!el)return;
+  if(!arr.length){
+    el.innerHTML=`<div class="empty"><span class="material-symbols-outlined">inbox</span><div class="empty-text">No sessions yet</div></div>`;
+    return;
+  }
+  el.innerHTML=arr.map((s,i)=>{
+    const sc=subjectColor(s.subject);
+    const isPaid=s.paid!==false;
+    return `<div class="session-item" style="animation-delay:${i*35}ms">
+      <div class="session-avatar" style="background:${sc.bg};color:${sc.c}">${initials(s.name)}</div>
+      <div class="session-info">
+        <div class="session-name" ${nameClick(s.name)}>${escHtml(s.name)}</div>
+        <div class="session-meta">${s.date}${s.type?' · '+s.type:''}</div>
+      </div>
+      <div class="session-badges">
+        <span class="badge" style="background:${sc.bg};color:${sc.c}">${s.subject}</span>
+        <span class="badge ${isPaid?'badge-paid':'badge-unpaid'}" onclick="togglePaid('${s.id}')" title="${isPaid?'Mark unpaid':'Mark paid'}">${isPaid?'PAID':'UNPAID'}</span>
+      </div>
+      <div class="session-amount" style="color:${isPaid?'var(--text)':'var(--steel)'}">${fmt(s.amount)}</div>
+      <button class="session-edit" onclick="openSessionModal('${s.id}')" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+      ${withDelete?`<button class="session-delete" onclick="deleteSession('${s.id}')" title="Delete"><span class="material-symbols-outlined">delete</span></button>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 14 — STUDENT PROFILES (profile, lessons, marks)
+// ══════════════════════════════════════════════════════════
+let currentStudent=null;
+let spTab='overview';
+let marksChart=null;
+
+function blankStudent(){
+  return {phone:'',parentName:'',parentPhone:'',grade:'',school:'',notes:'',reminders:true,lessons:[],marks:[]};
+}
+// Returns the profile for a name, creating an empty one if needed
+function getStudent(name){
+  if(!students[name])students[name]=blankStudent();
+  const st=students[name];
+  if(!Array.isArray(st.lessons))st.lessons=[];
+  if(!Array.isArray(st.marks))st.marks=[];
+  return st;
+}
+// Students a schedule covers: group members if listed, otherwise the schedule name
+function patternStudents(p){
+  return (p.type==='Group'&&Array.isArray(p.members)&&p.members.length)?p.members:[p.name];
+}
+// Tap target for a schedule's name: the student, unless it is a named group of members
+function patternNameClick(p){return patternStudents(p)[0]===p.name?nameClick(p.name):'';}
+function allStudentNames(){
+  const set=new Set(Object.keys(students));
+  sessions.forEach(s=>set.add(s.name));
+  patterns.forEach(p=>patternStudents(p).forEach(n=>set.add(n)));
+  return [...set].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+}
+function fmtTime12(t){
+  if(!t)return '';
+  const[h,m]=t.split(':').map(Number);
+  return `${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`;
+}
+function fmtDate(ds){
+  if(!ds)return '';
+  const d=new Date(ds+'T00:00');
+  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+function markTotal(m){return Number(m.total)||0;}
+function avgMark(marks){return marks.length?marks.reduce((a,m)=>a+markTotal(m),0)/marks.length:null;}
+function byDateDesc(a,b){return (b.date||'').localeCompare(a.date||'');}
+
+// ── PANEL ────────────────────────────────────────────────
+function openStudentPanel(name,tab){
+  if(!name)return;
+  if(name!==currentStudent)spTab=tab||'overview';
+  else if(tab)spTab=tab;
+  currentStudent=name;
+  renderStudentPanel();
+  document.getElementById('student-panel').classList.add('open');
+}
+function closeStudentPanel(){
+  document.getElementById('student-panel').classList.remove('open');
+  if(marksChart){marksChart.destroy();marksChart=null;}
+}
+function setStudentTab(tab){spTab=tab;renderStudentPanel();}
+
+function renderStudentPanel(){
+  const name=currentStudent;if(!name)return;
+  const st=students[name]||blankStudent();
+  const studentSessions=sessions.filter(s=>s.name===name);
+  const sc=subjectColor(studentSessions[0]?.subject||'');
+  const av=document.getElementById('sp-avatar');
+  av.textContent=initials(name);av.style.background=sc.bg;av.style.color=sc.c;
+  document.getElementById('sp-name-text').textContent=name;
+  document.getElementById('sp-sub-text').textContent=[st.grade,st.school].filter(Boolean).join(' · ');
+  document.querySelectorAll('#sp-tabs .sp-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===spTab));
+  if(marksChart){marksChart.destroy();marksChart=null;}
+  const body=document.getElementById('sp-body');
+  body.scrollTop=0;
+  if(spTab==='overview')body.innerHTML=renderStudentOverview(name,st,studentSessions);
+  else if(spTab==='lessons')body.innerHTML=renderStudentLessons(st);
+  else if(spTab==='marks'){body.innerHTML=renderStudentMarks(st);drawMarksChart(st);}
+  else body.innerHTML=renderStudentPayments(studentSessions);
+}
+
+function renderStudentOverview(name,st,studentSessions){
+  const unpaid=sum(studentSessions.filter(s=>s.paid===false));
+  const avg=avgMark(st.marks);
+  const phone=normalizePhone(st.phone);
+  const parentPhone=normalizePhone(st.parentPhone);
+  const scheds=patterns.filter(p=>patternStudents(p).includes(name));
+  const lastLesson=[...st.lessons].sort(byDateDesc)[0];
+  const lastMark=[...st.marks].sort(byDateDesc)[0];
+  const row=(lbl,val)=>`<div class="sp-row"><div class="sp-row-lbl">${lbl}</div><div class="sp-row-val">${val}</div></div>`;
+  const dash='<span style="color:var(--text-ter)">—</span>';
+  return `
+    <div class="sp-stats" style="margin:-14px -14px 16px">
+      <div class="sp-stat"><div class="sp-stat-val">${studentSessions.length}</div><div class="sp-stat-lbl">Sessions</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${st.lessons.length}</div><div class="sp-stat-lbl">Lessons</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${avg===null?'—':Math.round(avg)+'%'}</div><div class="sp-stat-lbl">Average Mark</div></div>
+      <div class="sp-stat"><div class="sp-stat-val" style="color:var(--steel)">${fmt(unpaid)}</div><div class="sp-stat-lbl">Outstanding</div></div>
+    </div>
+    <div class="sp-block">
+      <div class="sp-sess-title">Details</div>
+      ${row('WhatsApp',phone?`<a href="https://wa.me/${phone}" target="_blank" rel="noopener" style="color:var(--silver)">+${phone}</a>`:`<button class="btn btn-ghost btn-sm" onclick="openStudentModal(${jsArg(name)})">Add number</button>`)}
+      ${row('Reminders',st.reminders===false?'Off':'On')}
+      ${row('Parent',st.parentName?escHtml(st.parentName):dash)}
+      ${row('Parent phone',parentPhone?`<a href="tel:+${parentPhone}" style="color:var(--silver)">+${parentPhone}</a>`:dash)}
+    </div>
+    <div class="sp-block">
+      <div class="sp-sess-title">Classes</div>
+      ${scheds.length?scheds.map(p=>`<div class="sp-list-item">
+        <div class="sp-list-title">${escHtml(p.subject)} · ${p.type}${p.type==='Group'&&p.name!==name?' · '+escHtml(p.name):''}</div>
+        <div class="sp-list-meta">Every ${p.days.map(d=>DAYS_FULL[d].slice(0,3)).join(', ')}${p.time?' · '+fmtTime12(p.time):' · no time set'}${p.active?'':' · PAUSED'}</div>
+      </div>`).join(''):`<div class="empty-text" style="opacity:0.6;font-size:12px">No recurring schedule.</div>`}
+    </div>
+    <div class="sp-block">
+      <div class="sp-sess-title">Latest</div>
+      ${row('Lesson',lastLesson?`${escHtml(lastLesson.topic)} <span class="sp-list-meta">· ${fmtDate(lastLesson.date)}</span>`:dash)}
+      ${row('Mark',lastMark?`${Math.round(markTotal(lastMark))}/100 · ${escHtml(lastMark.test)} <span class="sp-list-meta">· ${fmtDate(lastMark.date)}</span>`:dash)}
+    </div>
+    ${st.notes?`<div class="sp-block"><div class="sp-sess-title">Notes</div><div class="sp-notes">${escHtml(st.notes)}</div></div>`:''}`;
+}
+
+function renderStudentLessons(st){
+  const lessons=[...st.lessons].sort(byDateDesc);
+  return `
+    <div style="display:flex;align-items:center;margin-bottom:12px">
+      <div class="sp-sess-title" style="margin-bottom:0">${lessons.length} lesson${lessons.length!==1?'s':''} recorded</div>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openLessonModal(null)"><span class="material-symbols-outlined">add</span> Lesson</button>
+    </div>
+    ${lessons.length?lessons.map(l=>`<div class="sp-list-item">
+      <div class="sp-list-head">
+        <div class="sp-list-title">${escHtml(l.topic)}</div>
+        <button class="sp-icon-btn" onclick="openLessonModal('${l.id}')"><span class="material-symbols-outlined">edit</span></button>
+      </div>
+      <div class="sp-list-meta">${fmtDate(l.date)}${l.subject?' · '+escHtml(l.subject):''}</div>
+      ${l.notes?`<div class="sp-list-body">${escHtml(l.notes)}</div>`:''}
+    </div>`).join(''):`<div class="empty"><span class="material-symbols-outlined">menu_book</span><div class="empty-text">No lessons yet. Add what you covered each class.</div></div>`}`;
+}
+
+// Average % per breakdown section (e.g. MCQ, Essay) across all tests
+function sectionAverages(marks){
+  const acc={};
+  marks.forEach(m=>(m.parts||[]).forEach(p=>{
+    const key=p.label.trim().toLowerCase();
+    if(!acc[key])acc[key]={label:p.label.trim(),score:0,max:0,count:0};
+    acc[key].score+=Number(p.score)||0;acc[key].max+=Number(p.max)||0;acc[key].count++;
+  }));
+  return Object.values(acc).filter(a=>a.max>0).map(a=>({...a,pct:a.score/a.max*100})).sort((a,b)=>b.pct-a.pct);
+}
+function partBars(parts){
+  return `<div class="mark-parts">${parts.map(p=>{
+    const pct=p.max?Math.min(100,p.score/p.max*100):0;
+    return `<div class="mark-part">
+      <div class="mark-part-lbl">${escHtml(p.label)}</div>
+      <div class="mark-part-bar"><div class="mark-part-fill" style="width:${pct}%"></div></div>
+      <div class="mark-part-val">${p.score}/${p.max}</div>
+    </div>`;}).join('')}</div>`;
+}
+function renderStudentMarks(st){
+  const marks=[...st.marks].sort(byDateDesc);
+  const head=`<div style="display:flex;align-items:center;margin-bottom:12px">
+      <div class="sp-sess-title" style="margin-bottom:0">${marks.length} result${marks.length!==1?'s':''}</div>
+      <button class="btn btn-primary btn-sm" style="margin-left:auto" onclick="openMarkModal(null)"><span class="material-symbols-outlined">add</span> Marks</button>
+    </div>`;
+  if(!marks.length)return head+`<div class="empty"><span class="material-symbols-outlined">grading</span><div class="empty-text">No marks yet. Add test results out of 100.</div></div>`;
+  const avg=avgMark(marks);
+  const latest=markTotal(marks[0]);
+  const best=Math.max(...marks.map(markTotal));
+  let trend='—';
+  if(marks.length>1){
+    const diff=Math.round(latest-markTotal(marks[1]));
+    trend=diff>0?`<span class="mark-trend-up">▲ ${diff}</span>`:diff<0?`<span class="mark-trend-down">▼ ${-diff}</span>`:'±0';
+  }
+  const sections=sectionAverages(marks);
+  return head+`
+    <div class="sp-stats" style="margin:0 -14px 16px">
+      <div class="sp-stat"><div class="sp-stat-val">${Math.round(latest)}</div><div class="sp-stat-lbl">Latest</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${Math.round(avg)}</div><div class="sp-stat-lbl">Average</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${Math.round(best)}</div><div class="sp-stat-lbl">Best</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${trend}</div><div class="sp-stat-lbl">Vs previous test</div></div>
+    </div>
+    ${marks.length>1?`<div class="sp-block"><div class="sp-sess-title">Progress</div><div class="chart-container" style="height:180px"><canvas id="sp-marks-chart"></canvas></div></div>`:''}
+    ${sections.length?`<div class="sp-block">
+      <div class="sp-sess-title">Section averages${sections.length>1?' · weakest: '+escHtml(sections[sections.length-1].label):''}</div>
+      <div class="mark-parts">${sections.map(a=>`<div class="mark-part">
+        <div class="mark-part-lbl">${escHtml(a.label)}</div>
+        <div class="mark-part-bar"><div class="mark-part-fill" style="width:${Math.min(100,a.pct)}%"></div></div>
+        <div class="mark-part-val">${Math.round(a.pct)}%</div>
+      </div>`).join('')}</div>
+    </div>`:''}
+    <div class="sp-sess-title">All results</div>
+    ${marks.map(m=>`<div class="sp-list-item">
+      <div class="sp-list-head">
+        <div style="flex:1;min-width:0">
+          <div class="sp-list-title">${escHtml(m.test)}</div>
+          <div class="sp-list-meta">${fmtDate(m.date)}${m.subject?' · '+escHtml(m.subject):''}</div>
+        </div>
+        <div class="mark-score">${Math.round(markTotal(m)*10)/10}<span style="font-size:10px;color:var(--text-ter)">/100</span></div>
+        <button class="sp-icon-btn" onclick="openMarkModal('${m.id}')"><span class="material-symbols-outlined">edit</span></button>
+      </div>
+      ${(m.parts||[]).length?partBars(m.parts):''}
+      ${m.notes?`<div class="sp-list-body">${escHtml(m.notes)}</div>`:''}
+    </div>`).join('')}`;
+}
+function drawMarksChart(st){
+  const canvas=document.getElementById('sp-marks-chart');
+  if(!canvas||typeof Chart==='undefined')return;
+  const marks=[...st.marks].sort((a,b)=>byDateDesc(b,a));
+  const subjects=[...new Set(marks.map(m=>m.subject||''))];
+  const labels=marks.map(m=>fmtDate(m.date).slice(0,-5));
+  const datasets=subjects.map(subj=>{
+    const c=subjectColor(subj).c;
+    return{
+      label:subj||'Marks',
+      data:marks.map(m=>(m.subject||'')===subj?markTotal(m):null),
+      borderColor:c,backgroundColor:c,pointRadius:4,tension:0.25,spanGaps:true,
+    };
+  });
+  marksChart=new Chart(canvas,{
+    type:'line',
+    data:{labels,datasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:subjects.length>1,labels:{color:'#849495',font:{size:10,family:'JetBrains Mono'},boxWidth:8}},
+        tooltip:{callbacks:{title:items=>marks[items[0].dataIndex].test,label:ctx=>`${ctx.dataset.label}: ${ctx.raw}/100`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'}}},
+        y:{min:0,max:100,grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'},stepSize:25}}
+      }
+    }
+  });
+}
+function renderStudentPayments(studentSessions){
+  const total=sum(studentSessions);
+  const paid=sum(studentSessions.filter(s=>s.paid!==false));
+  const unpaid=sum(studentSessions.filter(s=>s.paid===false));
+  return `
+    <div class="sp-stats" style="margin:-14px -14px 16px">
+      <div class="sp-stat"><div class="sp-stat-val">${fmt(total)}</div><div class="sp-stat-lbl">Total Earned</div></div>
+      <div class="sp-stat"><div class="sp-stat-val">${studentSessions.length}</div><div class="sp-stat-lbl">Sessions</div></div>
+      <div class="sp-stat"><div class="sp-stat-val" style="color:var(--silver)">${fmt(paid)}</div><div class="sp-stat-lbl">Paid</div></div>
+      <div class="sp-stat"><div class="sp-stat-val" style="color:var(--steel)">${fmt(unpaid)}</div><div class="sp-stat-lbl">Outstanding</div></div>
+    </div>
+    <div class="sp-sess-title">Session History</div>
+    ${studentSessions.length?studentSessions.slice(0,50).map(s=>{
+      const isPaid=s.paid!==false;
+      return `<div class="session-item" style="margin-bottom:5px">
+        <div class="session-info">
+          <div style="font-size:12px;color:var(--text)">${s.date}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter)">${s.subject} · ${s.type}</div>
+        </div>
+        <span class="badge ${isPaid?'badge-paid':'badge-unpaid'}" onclick="togglePaid('${s.id}',true)" title="${isPaid?'Mark unpaid':'Mark paid'}">${isPaid?'PAID':'UNPAID'}</span>
+        <div class="session-amount" style="color:${isPaid?'var(--text)':'var(--steel)'}">${fmt(s.amount)}</div>
+      </div>`;
+    }).join(''):'<div class="empty"><div class="empty-text">No sessions</div></div>'}`;
+}
+
+// ── PROFILE MODAL (add / edit / rename) ──────────────────
+let editingStudentName=null;
+let stmReminders=true;
+function setStmReminders(val){
+  stmReminders=val;
+  document.getElementById('stm-rem-on').className=val?'active-paid':'';
+  document.getElementById('stm-rem-off').className=!val?'active-unpaid':'';
+}
+function openStudentModal(name){
+  editingStudentName=name;
+  const st=name?(students[name]||blankStudent()):blankStudent();
+  document.getElementById('stm-title').textContent=name?'Edit profile':'Add student';
+  document.getElementById('stm-name').value=name||'';
+  document.getElementById('stm-grade').value=st.grade||'';
+  document.getElementById('stm-school').value=st.school||'';
+  document.getElementById('stm-phone').value=st.phone||'';
+  document.getElementById('stm-parent').value=st.parentName||'';
+  document.getElementById('stm-parent-phone').value=st.parentPhone||'';
+  document.getElementById('stm-notes').value=st.notes||'';
+  setStmReminders(st.reminders!==false);
+  document.getElementById('stm-delete-btn').style.display=(name&&students[name])?'inline-flex':'none';
+  document.getElementById('student-modal').classList.add('open');
+}
+function closeStudentModal(){document.getElementById('student-modal').classList.remove('open');editingStudentName=null;}
+function renameStudent(oldName,newName){
+  sessions.forEach(s=>{if(s.name===oldName)s.name=newName;});
+  patterns.forEach(p=>{
+    if(p.name===oldName)p.name=newName;
+    if(Array.isArray(p.members))p.members=p.members.map(m=>m===oldName?newName:m);
+  });
+  if(students[oldName]){students[newName]=students[oldName];delete students[oldName];}
+  if(currentStudent===oldName)currentStudent=newName;
+}
+function saveStudentModal(){
+  const name=document.getElementById('stm-name').value.trim();
+  if(!name){toast('Enter student name.');return;}
+  const phoneRaw=document.getElementById('stm-phone').value.trim();
+  if(phoneRaw&&!normalizePhone(phoneRaw)){toast('Check the WhatsApp number.');return;}
+  const oldName=editingStudentName;
+  const nameTaken=allStudentNames().includes(name);
+  const existing=students[name];
+  if(!oldName&&existing&&(existing.phone||existing.lessons?.length||existing.marks?.length)){
+    toast('A student with that name already exists.');return;
+  }
+  if(oldName&&oldName!==name){
+    if(nameTaken){toast('A student with that name already exists.');return;}
+    renameStudent(oldName,name);
+  }
+  const st=getStudent(name);
+  st.grade=document.getElementById('stm-grade').value.trim();
+  st.school=document.getElementById('stm-school').value.trim();
+  st.phone=phoneRaw;
+  st.parentName=document.getElementById('stm-parent').value.trim();
+  st.parentPhone=document.getElementById('stm-parent-phone').value.trim();
+  st.notes=document.getElementById('stm-notes').value.trim();
+  st.reminders=stmReminders;
+  save();closeStudentModal();
+  updateStudentDatalist();
+  if(document.getElementById('section-students').classList.contains('active'))renderStudents();
+  renderReminders();
+  if(!oldName||document.getElementById('student-panel').classList.contains('open'))openStudentPanel(name);
+  showToast('stu_'+Date.now(),'info','Profile saved',name,'check_circle');
+}
+function deleteStudentProfile(){
+  const name=editingStudentName;if(!name)return;
+  if(!confirm(`Delete ${name}'s profile, lessons and marks?\nSessions and payments are kept.`))return;
+  delete students[name];
+  save();closeStudentModal();
+  if(currentStudent===name)renderStudentPanel();
+  if(document.getElementById('section-students').classList.contains('active'))renderStudents();
+  toast('Profile deleted');
+}
+
+// ── LESSONS ──────────────────────────────────────────────
+let editingLessonId=null;
+function openLessonModal(id){
+  const st=getStudent(currentStudent);
+  editingLessonId=id;
+  const l=id?st.lessons.find(x=>x.id===id):null;
+  const lastSubj=sessions.find(s=>s.name===currentStudent)?.subject||settings.subjects[0];
+  document.getElementById('lm-title').textContent=l?'Edit lesson':'Add lesson';
+  document.getElementById('lm-date').value=l?.date||today();
+  document.getElementById('lm-subject').value=l?.subject||lastSubj;
+  document.getElementById('lm-topic').value=l?.topic||'';
+  document.getElementById('lm-notes').value=l?.notes||'';
+  document.getElementById('lm-delete-btn').style.display=l?'inline-flex':'none';
+  document.getElementById('lesson-modal').classList.add('open');
+}
+function closeLessonModal(){document.getElementById('lesson-modal').classList.remove('open');editingLessonId=null;}
+function saveLesson(){
+  const date=document.getElementById('lm-date').value;
+  const subject=document.getElementById('lm-subject').value;
+  const topic=document.getElementById('lm-topic').value.trim();
+  const notes=document.getElementById('lm-notes').value.trim();
+  if(!date){toast('Select a date.');return;}
+  if(!topic){toast('Enter the lesson topic.');return;}
+  const st=getStudent(currentStudent);
+  const l=editingLessonId&&st.lessons.find(x=>x.id===editingLessonId);
+  if(l)Object.assign(l,{date,subject,topic,notes});
+  else st.lessons.unshift({id:uid(),date,subject,topic,notes});
+  save();closeLessonModal();renderStudentPanel();toast('Lesson saved');
+}
+function deleteLesson(){
+  if(!editingLessonId||!confirm('Delete this lesson?'))return;
+  const st=getStudent(currentStudent);
+  st.lessons=st.lessons.filter(l=>l.id!==editingLessonId);
+  save();closeLessonModal();renderStudentPanel();toast('Lesson deleted');
+}
+
+// ── MARKS (out of 100, optional section breakdown) ───────
+let editingMarkId=null;
+function addMarkPartRow(label='',score='',max=''){
+  const wrap=document.getElementById('mm-parts');
+  const row=document.createElement('div');
+  row.className='part-row';
+  row.innerHTML=`
+    <div class="form-group"><label class="form-label">Section</label><input class="form-input mp-label" placeholder="e.g. MCQ"/></div>
+    <div class="form-group"><label class="form-label">Score</label><input class="form-input mp-score" type="number" inputmode="decimal" min="0"/></div>
+    <div class="form-group"><label class="form-label">Out of</label><input class="form-input mp-max" type="number" inputmode="decimal" min="1"/></div>
+    <button class="sp-icon-btn" title="Remove" onclick="this.parentElement.remove();updateMarkPartsTotal()"><span class="material-symbols-outlined">close</span></button>`;
+  row.querySelector('.mp-label').value=label;
+  row.querySelector('.mp-score').value=score;
+  row.querySelector('.mp-max').value=max;
+  row.querySelectorAll('input').forEach(i=>i.addEventListener('input',updateMarkPartsTotal));
+  wrap.appendChild(row);
+  updateMarkPartsTotal();
+}
+function readMarkParts(){
+  return [...document.querySelectorAll('#mm-parts .part-row')].map(r=>({
+    label:r.querySelector('.mp-label').value.trim(),
+    score:r.querySelector('.mp-score').value,
+    max:r.querySelector('.mp-max').value,
+  })).filter(p=>p.label||p.score!==''||p.max!=='');
+}
+function updateMarkPartsTotal(){
+  const parts=readMarkParts();
+  const el=document.getElementById('mm-parts-total');
+  const totalGroup=document.getElementById('mm-total-group');
+  if(!parts.length){el.textContent='';el.classList.remove('bad');totalGroup.style.display='';return;}
+  totalGroup.style.display='none';
+  const score=parts.reduce((a,p)=>a+(parseFloat(p.score)||0),0);
+  const max=parts.reduce((a,p)=>a+(parseFloat(p.max)||0),0);
+  el.textContent=`Total: ${Math.round(score*10)/10} / ${Math.round(max*10)/10}`+(max!==100?'  ·  sections must add up to 100':'');
+  el.classList.toggle('bad',max!==100);
+}
+function openMarkModal(id){
+  const st=getStudent(currentStudent);
+  editingMarkId=id;
+  const m=id?st.marks.find(x=>x.id===id):null;
+  const lastSubj=sessions.find(s=>s.name===currentStudent)?.subject||settings.subjects[0];
+  document.getElementById('mm-title').textContent=m?'Edit marks':'Add marks';
+  document.getElementById('mm-test').value=m?.test||'';
+  document.getElementById('mm-date').value=m?.date||today();
+  document.getElementById('mm-subject').value=m?.subject||lastSubj;
+  document.getElementById('mm-total').value=m&&!(m.parts||[]).length?m.total:'';
+  document.getElementById('mm-notes').value=m?.notes||'';
+  document.getElementById('mm-parts').innerHTML='';
+  if(m)(m.parts||[]).forEach(p=>addMarkPartRow(p.label,p.score,p.max));
+  else{
+    // New result: reuse the section layout of this student's last broken-down paper
+    const prev=[...st.marks].sort(byDateDesc).find(x=>(x.parts||[]).length);
+    if(prev)prev.parts.forEach(p=>addMarkPartRow(p.label,'',p.max));
+  }
+  updateMarkPartsTotal();
+  document.getElementById('mm-delete-btn').style.display=m?'inline-flex':'none';
+  document.getElementById('mark-modal').classList.add('open');
+}
+function closeMarkModal(){document.getElementById('mark-modal').classList.remove('open');editingMarkId=null;}
+function saveMark(){
+  const test=document.getElementById('mm-test').value.trim();
+  const date=document.getElementById('mm-date').value;
+  const subject=document.getElementById('mm-subject').value;
+  const notes=document.getElementById('mm-notes').value.trim();
+  if(!test){toast('Enter the test name.');return;}
+  if(!date){toast('Select a date.');return;}
+  const raw=readMarkParts();
+  let parts=[],total;
+  if(raw.length){
+    for(const p of raw){
+      const score=parseFloat(p.score),max=parseFloat(p.max);
+      if(!p.label){toast('Name every section.');return;}
+      if(isNaN(max)||max<=0){toast(`Enter "out of" for ${p.label}.`);return;}
+      if(isNaN(score)||score<0||score>max){toast(`${p.label}: score must be 0–${max}.`);return;}
+      parts.push({label:p.label,score,max});
+    }
+    const maxSum=parts.reduce((a,p)=>a+p.max,0);
+    if(Math.abs(maxSum-100)>0.001){toast(`Sections add up to ${maxSum}, not 100.`);return;}
+    total=parts.reduce((a,p)=>a+p.score,0);
+  } else {
+    total=parseFloat(document.getElementById('mm-total').value);
+    if(isNaN(total)||total<0||total>100){toast('Enter a mark between 0 and 100.');return;}
+  }
+  total=Math.round(total*10)/10;
+  const st=getStudent(currentStudent);
+  const m=editingMarkId&&st.marks.find(x=>x.id===editingMarkId);
+  if(m)Object.assign(m,{test,date,subject,parts,total,notes});
+  else st.marks.push({id:uid(),test,date,subject,parts,total,notes});
+  save();closeMarkModal();renderStudentPanel();
+  showToast('mark_'+Date.now(),'info','Marks saved',`${currentStudent} · ${total}/100`,'grading');
+}
+function deleteMark(){
+  if(!editingMarkId||!confirm('Delete this result?'))return;
+  const st=getStudent(currentStudent);
+  st.marks=st.marks.filter(m=>m.id!==editingMarkId);
+  save();closeMarkModal();renderStudentPanel();toast('Result deleted');
+}
+
+// ── STUDENTS SECTION ─────────────────────────────────────
+function renderStudents(){
+  const el=document.getElementById('students-list');if(!el)return;
+  const q=(document.getElementById('students-search').value||'').trim().toLowerCase();
+  const names=allStudentNames().filter(n=>!q||n.toLowerCase().includes(q));
+  if(!names.length){
+    el.innerHTML=`<div class="empty"><span class="material-symbols-outlined">school</span><div class="empty-text">${q?'No matching students':'No students yet'}</div></div>`;
+    return;
+  }
+  el.innerHTML=names.map(n=>{
+    const st=students[n];
+    const count=sessions.filter(s=>s.name===n).length;
+    const avg=st?avgMark(st.marks):null;
+    const sc=subjectColor(sessions.find(s=>s.name===n)?.subject||'');
+    const meta=[st?.grade,pluralSess(count),avg!==null?'avg '+Math.round(avg)+'%':''].filter(Boolean).join(' · ');
+    return `<div class="student-row" ${nameClick(n)}>
+      <div class="session-avatar" style="background:${sc.bg};color:${sc.c}">${initials(n)}</div>
+      <div class="student-row-info">
+        <div class="student-row-name">${escHtml(n)}</div>
+        <div class="student-row-meta">${meta}</div>
+      </div>
+      ${normalizePhone(st?.phone)?'':`<span class="material-symbols-outlined" title="No WhatsApp number" style="font-size:16px;color:var(--text-ter)">phone_disabled</span>`}
+      <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-ter)">chevron_right</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 14b — WHATSAPP CLASS REMINDERS (one tap to send)
+// ══════════════════════════════════════════════════════════
+// "077 123 4567" / "+94 77 123 4567" / "0094..." → "94771234567" (wa.me format)
+function normalizePhone(raw){
+  if(!raw)return '';
+  let d=String(raw).replace(/\D/g,'');
+  const cc=(settings.countryCode||'94').replace(/\D/g,'');
+  if(d.startsWith('00'))d=d.slice(2);
+  else if(d.startsWith('0'))d=cc+d.slice(1);
+  else if(!String(raw).trim().startsWith('+')&&d.length<=9)d=cc+d;
+  return d.length>=10&&d.length<=15?d:'';
+}
+function loadRemindersSent(){
+  try{return JSON.parse(localStorage.getItem('tuition_reminders_sent')||'{}')||{};}catch(e){return {};}
+}
+function markReminderSent(key){
+  const sent=loadRemindersSent();
+  const cutoff=Date.now()-3*86400000;
+  Object.keys(sent).forEach(k=>{if(sent[k]<cutoff)delete sent[k];});
+  sent[key]=Date.now();
+  try{localStorage.setItem('tuition_reminders_sent',JSON.stringify(sent));}catch(e){}
+  setTimeout(renderReminders,400);
+}
+// Every class still to come today, one row per student, with its reminder status:
+// 'due' (inside the reminder window), 'later' (window not open yet), 'notime', 'nophone', 'off'
+function getTodayReminders(now=new Date()){
+  const ds=dateStr(now),dow=now.getDay();
+  const lead=settings.reminderLeadMins||120;
+  const out=[];
+  patterns.forEach(p=>{
+    if(!p.active||!p.days.includes(dow))return;
+    if(ds<p.startDate||(p.endDate&&ds>p.endDate))return;
+    let minsUntil=null,remindAt=null;
+    if(p.time){
+      const[h,m]=p.time.split(':').map(Number);
+      const start=new Date(now);start.setHours(h,m,0,0);
+      minsUntil=(start-now)/60000;
+      if(minsUntil<=0)return; // class already started
+      remindAt=new Date(start.getTime()-lead*60000);
+    }
+    patternStudents(p).forEach(name=>{
+      const st=students[name];
+      const phone=normalizePhone(st?.phone);
+      let status;
+      if(!p.time)status='notime';
+      else if(st&&st.reminders===false)status='off';
+      else if(!phone)status='nophone';
+      else status=minsUntil<=lead?'due':'later';
+      out.push({key:`${p.id}|${ds}|${name}`,name,pattern:p,minsUntil,remindAt,phone,status});
+    });
+  });
+  return out.sort((a,b)=>(a.minsUntil??1e9)-(b.minsUntil??1e9));
+}
+function getDueReminders(now=new Date()){return getTodayReminders(now).filter(r=>r.status==='due');}
+function buildReminderMessage(r){
+  const vals={
+    student:r.name,subject:r.pattern.subject,time:fmtTime12(r.pattern.time),
+    day:DAYS_FULL[new Date().getDay()],teacher:settings.teacherName||'',
+  };
+  return (settings.reminderTemplate||DEFAULT_REMINDER_TEMPLATE).replace(/\{(\w+)\}/g,(m,k)=>k in vals?vals[k]:m);
+}
+function waLink(phone,msg){return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;}
+function fmtMinsUntil(mins){
+  const h=Math.floor(mins/60),m=Math.round(mins%60);
+  return 'in '+(h?h+'h ':'')+m+'m';
+}
+const _notifiedReminders=new Set();
+function renderReminders(){
+  const card=document.getElementById('reminders-card');if(!card)return;
+  const rows=getTodayReminders();
+  const sent=loadRemindersSent();
+  if(!rows.length){card.style.display='none';return;}
+  card.style.display='';
+  const pending=rows.filter(r=>r.status==='due'&&!sent[r.key]);
+  document.getElementById('reminders-count').textContent=pending.length?`${pending.length} TO SEND`:'';
+  const lead=settings.reminderLeadMins||120;
+  document.getElementById('reminders-list').innerHTML=rows.map(r=>{
+    const isSent=!!sent[r.key];
+    const link=r.phone?waLink(r.phone,buildReminderMessage(r)):'';
+    const sendBtn=(label,cls)=>`<a class="btn ${cls} btn-sm" href="${link}" target="_blank" rel="noopener" onclick="markReminderSent(${jsArg(r.key)})"><span class="material-symbols-outlined">send</span> ${label}</a>`;
+    const meta=escHtml(r.pattern.subject)+(r.pattern.time?` · ${fmtTime12(r.pattern.time)} · ${fmtMinsUntil(r.minsUntil)}`:'');
+    let action,hint='';
+    if(r.status==='notime'){
+      action=`<button class="btn btn-ghost btn-sm" onclick="openPatternModal(${jsArg(r.pattern.id)})"><span class="material-symbols-outlined">schedule</span> Set time</button>`;
+      hint='No class time set, so no reminder.';
+    } else if(r.status==='off'){
+      action=`<span class="rem-meta">Reminders off</span>`;
+    } else if(r.status==='nophone'){
+      action=`<button class="btn btn-ghost btn-sm" onclick="openStudentModal(${jsArg(r.name)})"><span class="material-symbols-outlined">add_call</span> Add number</button>`;
+      hint='Add a WhatsApp number to get the Send button.';
+    } else if(isSent){
+      action=`<a class="rem-sent" href="${link}" target="_blank" rel="noopener" title="Send again"><span class="material-symbols-outlined">done_all</span>SENT</a>`;
+    } else if(r.status==='due'){
+      action=sendBtn('Send','btn-wa');
+    } else {
+      action=sendBtn('Send now','btn-ghost');
+      hint=`Send turns green at ${r.remindAt.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}.`;
+    }
+    return `<div class="rem-item">
+      <div class="rem-info">
+        <div class="rem-name clickable-name" ${nameClick(r.name)}>${escHtml(r.name)}</div>
+        <div class="rem-meta">${meta}</div>
+        ${hint?`<div class="rem-meta" style="color:var(--steel)">${hint}</div>`:''}
+      </div>
+      ${action}
+    </div>`;
+  }).join('');
+  // Nudge once per reminder while the app is open
+  pending.forEach(r=>{
+    if(_notifiedReminders.has(r.key))return;
+    _notifiedReminders.add(r.key);
+    showToast('rem_'+r.key,'info','Class reminder due',`${r.name} · ${fmtTime12(r.pattern.time)} — tap Send on Home`,'notifications_active');
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 14c — FULL BACKUP / RESTORE (JSON, includes profiles)
+// ══════════════════════════════════════════════════════════
+function exportBackup(){
+  const payload={app:'tuition-tracker',version:3,exportedAt:new Date().toISOString(),settings,sessions,patterns,calNotes,students};
+  const blob=new Blob([JSON.stringify(payload,null,1)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`tuition-backup-${today()}.json`;
+  a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  localStorage.setItem('tuition_last_export',Date.now());
+  const banner=document.getElementById('backup-banner');if(banner)banner.style.display='none';
+  showToast('backup','info','Backup saved','Includes sessions, schedules, profiles, lessons and marks.','backup');
+}
+function triggerRestoreBackup(){document.getElementById('backup-restore-input').click();}
+function restoreBackup(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    event.target.value='';
+    let d;
+    try{d=JSON.parse(e.target.result);}catch(err){showToast('restore_err','info','Restore failed','Not a valid backup file.','error');return;}
+    if(!d||!Array.isArray(d.sessions)){showToast('restore_err','info','Restore failed','Not a Tuition Tracker backup.','error');return;}
+    const when=d.exportedAt?new Date(d.exportedAt).toLocaleString():'unknown date';
+    if(!confirm(`Replace ALL current data with this backup?\n\nBackup from: ${when}\nSessions: ${d.sessions.length}\nStudents: ${Object.keys(d.students||{}).length}`))return;
+    sessions=d.sessions;
+    patterns=Array.isArray(d.patterns)?d.patterns:[];
+    calNotes=(d.calNotes&&typeof d.calNotes==='object')?d.calNotes:{};
+    students=(d.students&&typeof d.students==='object')?d.students:{};
+    if(d.settings&&typeof d.settings==='object'){settings={...settings,...d.settings};_persistSettings();}
+    save();
+    rebuildSubjectDropdowns();updateTopbarName();
+    showSection('dashboard');
+    showToast('restore','info','Backup restored',`${sessions.length} sessions · ${Object.keys(students).length} profiles`,'settings_backup_restore');
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 15 — SPARKLINES (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function drawSparkline(svgId,data,color='#B8C8D4'){
+  const svg=document.getElementById(svgId);if(!svg)return;
+  const w=svg.clientWidth||120,h=24;
+  const max=Math.max(...data,1);
+  const barW=Math.floor((w-data.length*2)/data.length);
+  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+  svg.innerHTML=data.map((v,i)=>{
+    const bh=Math.max(2,Math.round((v/max)*h));
+    const x=i*(barW+2),y=h-bh;
+    return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" fill="${v>0?color:'rgba(255,255,255,0.06)'}" rx="1"/>`;
+  }).join('');
+}
+function getLastNDays(n){
+  const now=new Date();
+  return Array.from({length:n},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-n+1+i);return dateStr(d);});
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 16 — DASHBOARD (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function renderDashboard(){
+  const now=new Date();
+  const todayStr=today();
+  const weekDates=getLastNDays(7);
+  const monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+  const todaySess=sessions.filter(s=>s.date===todayStr);
+  const weekSess=sessions.filter(s=>weekDates.includes(s.date));
+  const monthSess=sessions.filter(s=>new Date(s.date+'T00:00')>=monthStart);
+  const unpaidSess=sessions.filter(s=>s.paid===false);
+  const set=(id,val,sub)=>{
+    const e=document.getElementById(id);if(e)e.textContent=val;
+    if(sub!==undefined){const s=document.getElementById(id+'-s');if(s)s.textContent=sub;}
+  };
+  set('m-today',fmt(sum(todaySess)),pluralSess(todaySess.length));
+  set('m-week',fmt(sum(weekSess)),pluralSess(weekSess.length));
+  set('m-month',fmt(sum(monthSess)),pluralSess(monthSess.length));
+  set('m-all',fmt(sum(sessions)),pluralSess(sessions.length));
+  set('m-outstanding',fmt(sum(unpaidSess)),unpaidSess.length+' unpaid');
+  const outCard=document.getElementById('outstanding-card');
+  if(outCard)outCard.classList.toggle('outstanding-glow',unpaidSess.length>0);
+  // Sparklines
+  const last7=getLastNDays(7);
+  const daySum=ds=>sum(sessions.filter(s=>s.date===ds));
+  drawSparkline('spark-today',last7.map(daySum));
+  drawSparkline('spark-week',last7.map(daySum));
+  drawSparkline('spark-month',last7.map(ds=>sum(monthSess.filter(s=>s.date===ds))));
+  drawSparkline('spark-all',last7.map(daySum));
+  drawSparkline('spark-outstanding',last7.map(ds=>sum(sessions.filter(s=>s.date===ds&&s.paid===false))),'#6A8FA3');
+  // Goal
+  const goal=settings.monthlyGoal;
+  const gWrap=document.getElementById('goal-bar-wrap');
+  const gFill=document.getElementById('goal-bar-fill');
+  const gLabel=document.getElementById('goal-label');
+  if(goal&&gWrap&&gFill&&gLabel){
+    const pct=Math.min(100,(sum(monthSess)/goal*100));
+    gWrap.style.display='block';gFill.style.width=pct+'%';
+    gLabel.style.display='block';gLabel.textContent=`${Math.round(pct)}% OF ${fmt(goal)} GOAL`;
+  }
+  // Hero greeting
+  const hour=now.getHours();
+  const realGreet=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
+  const hg=document.getElementById('hero-greeting');
+  if(hg)hg.innerHTML=`${realGreet}, <span id="hero-name">${settings.teacherName.split(' ')[0]||'Teacher'}</span>`;
+  const hs=document.getElementById('hero-sub');
+  if(hs)hs.textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
+  // Monthly chart
+  const days=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  const labels=[],datasets={};
+  settings.subjects.forEach(s=>datasets[s]=[]);
+  for(let d=1;d<=days;d++){
+    const ds=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    labels.push(d);
+    settings.subjects.forEach(subj=>datasets[subj].push(sum(sessions.filter(s=>s.date===ds&&s.subject===subj))));
+  }
+  const legendEl=document.getElementById('dash-chart-legend');
+  if(legendEl){
+    legendEl.innerHTML=settings.subjects.map(s=>{
+      const c=subjectColor(s);
+      return `<span><span class="legend-dot" style="background:${c.c}"></span>${s}</span>`;
+    }).join('');
+  }
+  if(dashChart)dashChart.destroy();
+  const dsArr=settings.subjects.map(subj=>{
+    const c=subjectColor(subj);
+    return{label:subj,data:datasets[subj],backgroundColor:c.bg.replace('0.12','0.7'),borderRadius:1,borderSkipped:false};
+  });
+  const chartCtx=document.getElementById('dash-chart');
+  if(chartCtx&&typeof Chart!=='undefined'){
+    dashChart=new Chart(chartCtx,{
+      type:'bar',
+      data:{labels,datasets:dsArr},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#1f2021',titleColor:'#e3e2e3',bodyColor:'#b9cacb',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,padding:10,displayColors:false,callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'},maxTicksLimit:10},border:{color:'rgba(255,255,255,0.06)'}},
+          y:{stacked:true,grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'},callback:v=>v>0?fmt(v):''},border:{dash:[3,3],color:'transparent'}}
+        }
+      }
+    });
+  }
+  // Upcoming
+  const upcoming=[];
+  const activeP=patterns.filter(p=>p.active);
+  for(let i=0;i<=13;i++){
+    const d=new Date(now);d.setDate(d.getDate()+i);
+    const ds=dateStr(d);
+    activeP.forEach(p=>{
+      if(p.days.includes(d.getDay())&&ds>=p.startDate&&(!p.endDate||ds<=p.endDate)){
+        upcoming.push({date:ds,dayOfWeek:d.getDay(),dayNum:d.getDate(),month:d.getMonth(),pattern:p});
+      }
+    });
+    if(upcoming.length>=4)break;
+  }
+  const upEl=document.getElementById('dash-upcoming');
+  if(upEl){
+    if(!upcoming.length){
+      upEl.innerHTML=`<div class="empty" style="padding:20px"><span class="material-symbols-outlined">event</span><div class="empty-text">Add recurring schedules to see upcoming classes</div></div>`;
+    } else {
+      upEl.innerHTML=upcoming.slice(0,4).map(u=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div style="text-align:center;min-width:32px">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;color:var(--silver);line-height:1">${u.dayNum}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-ter)">${MONTHS[u.month]}</div>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="clickable-name" ${patternNameClick(u.pattern)} style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(u.pattern.name)}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter);margin-top:2px">${u.pattern.subject} · ${u.pattern.type}${u.pattern.time?' · '+fmtTime12(u.pattern.time):''}</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text)">${fmt(u.pattern.fee)}</div>
+        </div>`).join('');
+    }
+  }
+  renderTodayList('today-list');
+  updatePatternBadge();
+  renderReminders();
+  // Topbar date
+  const d=document.getElementById('topbar-date');
+  if(d)d.textContent=now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 17 — FILTER / OUTSTANDING (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function filterByUnpaid(unpaidOnly){
+  if(unpaidOnly){
+    unpaidFilterActive=true;
+    showSection('history');
+    document.getElementById('filter-paid').value='unpaid';
+    document.getElementById('unpaid-filter-badge').style.display='inline-block';
+    renderHistory();
+  } else {
+    showSection('history');
+  }
+}
+function clearUnpaidFilter(){
+  unpaidFilterActive=false;
+  document.getElementById('filter-paid').value='';
+  document.getElementById('unpaid-filter-badge').style.display='none';
+  renderHistory();
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 18 — QUICK FILL (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function onDateChange(){checkQuickFill();}
+function checkQuickFill(){
+  const dateVal=document.getElementById('f-date').value;
+  const banner=document.getElementById('quickfill-banner');
+  if(!dateVal||!banner)return;
+  const d=new Date(dateVal+'T00:00');
+  const dow=d.getDay();
+  const matches=patterns.filter(p=>p.active&&p.days.includes(dow)&&dateVal>=p.startDate&&(!p.endDate||dateVal<=p.endDate));
+  if(!matches.length){banner.style.display='none';return;}
+  quickFillData=matches[0];
+  document.getElementById('qf-title').textContent=`Quick fill: ${quickFillData.name}`;
+  document.getElementById('qf-desc').textContent=`${quickFillData.subject} · ${quickFillData.type} · ${fmt(quickFillData.fee)}`;
+  banner.style.display='flex';
+}
+function applyQuickFill(){
+  if(!quickFillData)return;
+  document.getElementById('f-name').value=quickFillData.name;
+  document.getElementById('f-subject').value=quickFillData.subject;
+  document.getElementById('f-type').value=quickFillData.type;
+  document.getElementById('f-amount').value=quickFillData.fee;
+  document.getElementById('quickfill-banner').style.display='none';
+  toast('Form filled from schedule');
+}
+function dismissQuickFill(){document.getElementById('quickfill-banner').style.display='none';quickFillData=null;}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 19 — PATTERNS (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function renderPatterns(){renderSuggestions();renderPatternsList();renderWeeklyProjection();updatePatternBadge();}
+
+function detectPatterns(){
+  const KEY=s=>`${s.name}|${s.subject}|${s.type}`;
+  const groups={};
+  sessions.forEach(s=>{const k=KEY(s);if(!groups[k])groups[k]=[];groups[k].push(s);});
+  const suggestions=[];
+  Object.entries(groups).forEach(([key,arr])=>{
+    if(arr.length<2)return;
+    const dowCount={};
+    arr.forEach(s=>{const dow=new Date(s.date+'T00:00').getDay();dowCount[dow]=(dowCount[dow]||0)+1;});
+    const repeatDays=Object.entries(dowCount).filter(([,c])=>c>=2).map(([d])=>parseInt(d));
+    if(!repeatDays.length)return;
+    const avgFee=Math.round(sum(arr)/arr.length);
+    const[name,subject,type]=key.split('|');
+    const alreadySaved=patterns.some(p=>p.name===name&&p.subject===subject&&p.type===type&&repeatDays.every(d=>p.days.includes(d)));
+    if(alreadySaved)return;
+    const suggId=key+'|'+repeatDays.join(',');
+    if(dismissedSuggestions.includes(suggId))return;
+    suggestions.push({id:suggId,name,subject,type,days:repeatDays,fee:avgFee,count:arr.length});
+  });
+  return suggestions;
+}
+function renderSuggestions(){
+  const suggs=detectPatterns();
+  const cont=document.getElementById('suggestions-container');
+  if(!suggs.length){cont.innerHTML='';return;}
+  cont.innerHTML=suggs.map(s=>`
+    <div class="suggestion-banner">
+      <span class="material-symbols-outlined" style="color:var(--silver);font-size:16px;flex-shrink:0">search</span>
+      <div class="s-body">
+        <div class="s-title">Pattern detected · ${escHtml(s.name)}</div>
+        <div class="s-desc">${s.subject} · ${s.type} · Every ${s.days.map(d=>DAYS_FULL[d]).join(', ')} · ~${fmt(s.fee)} · seen ${s.count}×</div>
+        <div class="s-actions">
+          <button class="btn btn-primary btn-sm" onclick='acceptSuggestion(${JSON.stringify(s).replace(/'/g,"&#39;")})'>
+            <span class="material-symbols-outlined">check</span> Add to schedule
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="dismissSuggestion('${s.id}')">Dismiss</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function acceptSuggestion(s){
+  patterns.push({id:uid(),name:s.name,subject:s.subject,type:s.type,days:s.days,fee:s.fee,time:'',startDate:today(),endDate:'',active:true});
+  dismissedSuggestions.push(s.id);
+  localStorage.setItem('tuition_dismissed_suggestions',JSON.stringify(dismissedSuggestions));
+  save();renderPatterns();showToast('sugg','info','Schedule added','Pattern saved.','check_circle');
+}
+function dismissSuggestion(id){
+  dismissedSuggestions.push(id);
+  localStorage.setItem('tuition_dismissed_suggestions',JSON.stringify(dismissedSuggestions));
+  renderPatterns();
+}
+function renderPatternsList(){
+  const el=document.getElementById('patterns-list');
+  if(!patterns.length){
+    el.innerHTML=`<div class="empty"><span class="material-symbols-outlined">event_repeat</span><div class="empty-text">No recurring schedules yet.</div></div>`;
+    return;
+  }
+  el.innerHTML=patterns.map(p=>{
+    const sc=subjectColor(p.subject);
+    return `<div class="pattern-card">
+      <div class="pattern-icon" style="background:${sc.bg}">
+        <span class="material-symbols-outlined" style="color:${sc.c};font-size:16px">menu_book</span>
+      </div>
+      <div class="pattern-body">
+        <div class="pattern-title clickable-name" ${patternNameClick(p)}>${escHtml(p.name)}</div>
+        ${p.type==='Group'&&(p.members||[]).length?`<div class="pattern-meta" style="margin-top:2px">${p.members.map(m=>`<span class="clickable-name" style="text-decoration:underline" ${nameClick(m)}>${escHtml(m)}</span>`).join(' ')}</div>`:''}
+        <div class="pattern-meta">
+          <span>${p.subject} · ${p.type}</span>
+          <span><span class="material-symbols-outlined">event_repeat</span>Every ${p.days.map(d=>DAYS_FULL[d].slice(0,3)).join(', ')}</span>
+          ${p.time?`<span><span class="material-symbols-outlined">schedule</span>${fmtTime12(p.time)}</span>`:`<span style="color:var(--steel)"><span class="material-symbols-outlined">schedule</span>No time · no reminder</span>`}
+          <span><span class="material-symbols-outlined">payments</span>${fmt(p.fee)}/session</span>
+        </div>
+      </div>
+      <div class="pattern-actions">
+        <span class="pattern-status ${p.active?'active':'paused'}">${p.active?'ACTIVE':'PAUSED'}</span>
+        <button class="btn btn-ghost btn-sm" onclick="togglePattern('${p.id}')">${p.active?'Pause':'Resume'}</button>
+        <button class="btn btn-primary btn-sm" onclick="openPatternModal('${p.id}')"><span class="material-symbols-outlined">edit</span></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function togglePattern(id){
+  const p=patterns.find(x=>x.id===id);if(!p)return;
+  p.active=!p.active;save();renderPatterns();
+  toast(p.active?'Schedule resumed':'Schedule paused');
+}
+function renderWeeklyProjection(){
+  const activePatterns=patterns.filter(p=>p.active);
+  let weekTotal=0;
+  document.getElementById('weekly-proj').innerHTML=DAYS_FULL.map((day,i)=>{
+    const dayP=activePatterns.filter(p=>p.days.includes(i));
+    const dayTotal=dayP.reduce((a,p)=>a+p.fee,0);
+    weekTotal+=dayTotal;
+    return `<div style="text-align:center">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-ter);margin-bottom:4px">${day.slice(0,2)}</div>
+      <div style="background:${dayTotal>0?'var(--silver-dim)':'var(--s-mid)'};border:1px solid ${dayTotal>0?'rgba(184,200,212,0.2)':'var(--border)'};border-radius:var(--r);padding:6px 2px;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        ${dayTotal>0
+          ?`<div style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--silver)">${(dayTotal/1000).toFixed(1)}k</div>
+            <div style="font-size:9px;color:var(--text-ter);margin-top:1px">${dayP.length}cl</div>`
+          :`<div style="color:var(--border-md);font-size:14px">—</div>`}
+      </div>
+    </div>`;
+  }).join('');
+  const el=document.getElementById('proj-weekly-total');
+  if(el)el.textContent=fmt(weekTotal);
+}
+function updatePatternBadge(){
+  const suggs=detectPatterns();
+  const badge=document.getElementById('nav-pattern-badge');
+  const badge2=document.getElementById('more-pattern-badge');
+  [badge,badge2].forEach(b=>{
+    if(!b)return;
+    b.textContent=suggs.length;
+    b.style.display=suggs.length?'inline-block':'none';
+  });
+}
+
+// ── PATTERN MODAL ────────────────────────────────────────
+function buildDowPicker(selected){
+  selectedDow=selected||[];
+  document.getElementById('dow-picker').innerHTML=DOW_LABELS.map((l,i)=>
+    `<button type="button" class="dow-btn ${selectedDow.includes(i)?'selected':''}" onclick="toggleDow(${i})" data-dow="${i}">${l}</button>`
+  ).join('');
+}
+function toggleDow(i){
+  if(selectedDow.includes(i))selectedDow=selectedDow.filter(d=>d!==i);
+  else selectedDow.push(i);
+  document.querySelectorAll('.dow-btn').forEach(b=>b.classList.toggle('selected',selectedDow.includes(parseInt(b.dataset.dow))));
+}
+function openPatternModal(id){
+  editingPatternId=id;
+  document.getElementById('pm-subject').innerHTML=settings.subjects.map(s=>`<option value="${s}">${s}</option>`).join('');
+  const del=document.getElementById('modal-delete-btn');
+  if(id){
+    const p=patterns.find(x=>x.id===id);if(!p)return;
+    document.getElementById('modal-title').textContent='Edit recurring schedule';
+    document.getElementById('pm-name').value=p.name;
+    document.getElementById('pm-subject').value=p.subject;
+    document.getElementById('pm-type').value=p.type;
+    document.getElementById('pm-fee').value=p.fee;
+    document.getElementById('pm-time').value=p.time||'';
+    document.getElementById('pm-start').value=p.startDate;
+    document.getElementById('pm-end').value=p.endDate||'';
+    document.getElementById('pm-members').value=(p.members||[]).join(', ');
+    buildDowPicker(p.days);del.style.display='inline-flex';
+  } else {
+    document.getElementById('modal-title').textContent='Add recurring schedule';
+    document.getElementById('pm-name').value='';
+    document.getElementById('pm-type').value='Individual';
+    document.getElementById('pm-fee').value='';
+    document.getElementById('pm-time').value='';
+    document.getElementById('pm-start').value=today();
+    document.getElementById('pm-end').value='';
+    document.getElementById('pm-members').value='';
+    buildDowPicker([]);del.style.display='none';
+  }
+  updatePmMembersVisibility();
+  document.getElementById('pattern-modal').classList.add('open');
+}
+function updatePmMembersVisibility(){
+  document.getElementById('pm-members-group').style.display=document.getElementById('pm-type').value==='Group'?'':'none';
+}
+function closePatternModal(){document.getElementById('pattern-modal').classList.remove('open');editingPatternId=null;}
+function savePattern(){
+  const name=document.getElementById('pm-name').value.trim();
+  const subject=document.getElementById('pm-subject').value;
+  const type=document.getElementById('pm-type').value;
+  const fee=parseFloat(document.getElementById('pm-fee').value);
+  const time=document.getElementById('pm-time').value;
+  const start=document.getElementById('pm-start').value;
+  const end=document.getElementById('pm-end').value;
+  if(!name){toast('Enter student name.');return;}
+  if(!selectedDow.length){toast('Select at least one day.');return;}
+  if(isNaN(fee)||fee<=0){toast('Enter valid fee.');return;}
+  if(!start){toast('Enter start date.');return;}
+  const members=type==='Group'
+    ?[...new Set(document.getElementById('pm-members').value.split(',').map(x=>x.trim()).filter(Boolean))]
+    :[];
+  if(editingPatternId){
+    const p=patterns.find(x=>x.id===editingPatternId);
+    if(p){p.name=name;p.subject=subject;p.type=type;p.fee=fee;p.time=time;p.days=[...selectedDow];p.startDate=start;p.endDate=end;p.members=members;}
+  } else {
+    patterns.push({id:uid(),name,subject,type,fee,time,days:[...selectedDow],startDate:start,endDate:end,active:true,members});
+  }
+  save();closePatternModal();renderPatterns();updateStudentDatalist();renderReminders();
+  showToast('pat','info','Schedule saved',time?'':'No class time set, so no WhatsApp reminder will be sent.','check_circle');
+}
+function deletePatternFromModal(){
+  if(!editingPatternId||!confirm('Delete this schedule?'))return;
+  patterns=patterns.filter(p=>p.id!==editingPatternId);
+  save();closePatternModal();renderPatterns();toast('Schedule deleted');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 20 — CALENDAR (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function renderCalendar(){
+  const y=calViewDate.getFullYear(),m=calViewDate.getMonth();
+  document.getElementById('cal-label').textContent=MONTHS_F[m]+' '+y;
+  const first=new Date(y,m,1).getDay();
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const todayStr=today();
+  document.getElementById('cal-dow-row').innerHTML=
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const sessionMap={};
+  sessions.forEach(s=>{
+    if(s.date.startsWith(`${y}-${String(m+1).padStart(2,'0')}`)){
+      if(!sessionMap[s.date])sessionMap[s.date]={total:0,count:0,hasUnpaid:false};
+      sessionMap[s.date].total+=s.amount;
+      sessionMap[s.date].count++;
+      if(s.paid===false)sessionMap[s.date].hasUnpaid=true;
+    }
+  });
+  const recurringDays=new Set();
+  patterns.filter(p=>p.active).forEach(p=>{
+    for(let d=1;d<=daysInMonth;d++){
+      const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dow=new Date(ds+'T00:00').getDay();
+      if(p.days.includes(dow)&&ds>=p.startDate&&(!p.endDate||ds<=p.endDate))recurringDays.add(ds);
+    }
+  });
+  let html='';
+  for(let i=0;i<first;i++){
+    html+=`<div class="cal-cell empty-cell"><span class="cal-cell-num">${new Date(y,m,-first+i+1).getDate()}</span></div>`;
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const info=sessionMap[ds];
+    const isRec=recurringDays.has(ds);
+    let cls='cal-cell';
+    if(ds===todayStr)cls+=' today';
+    if(ds===selectedDay)cls+=' selected';
+    if(info)cls+=' has-session';
+    else if(isRec)cls+=' has-recurring';
+    const dots=info?`<div class="cal-dots">${Array(Math.min(info.count,4)).fill(null).map((_,i)=>`<div class="cal-dot${info.hasUnpaid&&i===0?' unpaid':''}"></div>`).join('')}</div>`:
+      isRec?`<div class="cal-dots"><div class="cal-dot" style="background:var(--border-md)"></div></div>`:'';
+    const rev=info?`<div class="cal-rev">${(info.total/1000).toFixed(1)}k</div>`:'';
+    html+=`<div class="${cls}" onclick="selectDay('${ds}')">
+      <span class="cal-cell-num">${d}</span>${dots}${rev}
+    </div>`;
+  }
+  document.getElementById('cal-grid').innerHTML=html;
+  if(selectedDay)renderDayDetail(selectedDay);
+}
+function changeMonth(dir,mode){
+  if(mode==='today')calViewDate=new Date();
+  else calViewDate.setMonth(calViewDate.getMonth()+dir);
+  selectedDay=null;
+  document.getElementById('day-detail').innerHTML='';
+  renderCalendar();
+}
+function selectDay(ds){selectedDay=ds;renderCalendar();}
+function renderDayDetail(ds){
+  const daySess=sessions.filter(s=>s.date===ds);
+  const dow=new Date(ds+'T00:00').getDay();
+  const recurringToday=patterns.filter(p=>p.active&&p.days.includes(dow)&&ds>=p.startDate&&(!p.endDate||ds<=p.endDate));
+  let html=`<div class="day-detail-wrap">
+    <div style="display:flex;align-items:center;margin-bottom:10px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text)">${ds} — ${DAYS_FULL[dow]}</div>
+      ${daySess.length?`<div style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--silver)">${fmt(sum(daySess))}</div>`:''}
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" onclick="openAddSessionFromCal('${ds}')">
+        <span class="material-symbols-outlined">add</span> Add session
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="openNoteModal('${ds}')">
+        <span class="material-symbols-outlined">sticky_note_2</span> ${calNotes[ds]?'Edit note':'Add note'}
+      </button>
+    </div>`;
+  if(recurringToday.length){
+    html+=`<div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-ter);margin-bottom:8px">Recurring on ${DAYS_FULL[dow]}</div>`;
+    recurringToday.forEach(p=>{
+      const logged=daySess.some(s=>s.name===p.name&&s.subject===p.subject);
+      html+=`<div style="display:flex;align-items:center;gap:10px;padding:8px;background:transparent;border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px">
+        <div style="flex:1">
+          <div class="clickable-name" ${patternNameClick(p)} style="font-size:12px;font-weight:600;color:var(--text)">${escHtml(p.name)}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter)">${p.subject} · ${p.type}${p.time?' · '+fmtTime12(p.time):''}</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text)">${fmt(p.fee)}</span>
+        ${logged
+          ?`<span style="font-size:11px;color:var(--silver);font-family:'JetBrains Mono',monospace">LOGGED</span>`
+          :`<button class="btn btn-primary btn-sm" onclick="quickLogFromPattern('${ds}','${p.id}')"><span class="material-symbols-outlined">bolt</span> Log</button>`}
+      </div>`;
+    });
+  }
+  if(calNotes[ds])html+=`<div style="padding:8px 10px;background:rgba(209,188,255,0.05);border:1px solid rgba(61,100,120,0.15);border-radius:var(--r);font-size:12px;color:var(--text-sec);margin-bottom:8px">${escHtml(calNotes[ds])}</div>`;
+  if(daySess.length)html+=`<div class="session-list" id="day-sess-list"></div>`;
+  else if(!recurringToday.length&&!calNotes[ds])html+=`<div style="font-size:12px;color:var(--text-ter)">No sessions logged.</div>`;
+  html+='</div>';
+  document.getElementById('day-detail').innerHTML=html;
+  if(daySess.length)renderSessionList(daySess,'day-sess-list',false);
+}
+function openAddSessionFromCal(ds){
+  showSection('log');
+  document.getElementById('f-date').value=ds;
+  document.getElementById('quickfill-banner').style.display='none';
+  checkQuickFill();
+}
+function quickLogFromPattern(ds,patternId){
+  const p=patterns.find(x=>x.id===patternId);if(!p)return;
+  const s={id:uid(),name:p.name,date:ds,subject:p.subject,type:p.type,amount:p.fee,paid:false};
+  sessions.unshift(s);
+  save();renderDayDetail(ds);renderCalendar();
+  smartSessionToast(s);
+}
+
+// ── NOTE MODAL ───────────────────────────────────────────
+let noteDate=null;
+function openNoteModal(ds){
+  noteDate=ds;
+  document.getElementById('note-modal-title').textContent='Note · '+ds;
+  document.getElementById('note-text').value=calNotes[ds]||'';
+  document.getElementById('note-modal').classList.add('open');
+}
+function closeNoteModal(){document.getElementById('note-modal').classList.remove('open');noteDate=null;}
+function saveNote(){
+  if(!noteDate)return;
+  const txt=document.getElementById('note-text').value.trim();
+  if(txt)calNotes[noteDate]=txt;else delete calNotes[noteDate];
+  save();closeNoteModal();renderCalendar();toast('Note saved');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 21 — ANALYTICS (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function setRange(n,btn){
+  analyticsRange=n;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  renderAnalytics();
+}
+function setChartMode(mode,btn){
+  analyticsMode=mode;
+  document.querySelectorAll('#mode-bar,#mode-line').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAnalytics();
+}
+function renderAnalytics(){
+  const now=new Date();
+  const cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-(analyticsRange-1));
+  const filtered=sessions.filter(s=>new Date(s.date+'T00:00')>=cutoff);
+  // Subject cards
+  const scEl=document.getElementById('analytics-subject-cards');
+  if(scEl){
+    scEl.innerHTML=settings.subjects.map(subj=>{
+      const sc=subjectColor(subj);
+      const ss=filtered.filter(s=>s.subject===subj);
+      return `<div class="card" style="margin-bottom:0">
+        <div class="metric-label" style="color:${sc.c}">${subj}</div>
+        <div class="metric-value">${fmt(sum(ss))}</div>
+        <div class="metric-sub">${pluralSess(ss.length)}</div>
+      </div>`;
+    }).join('');
+  }
+  // Chart data
+  const labels=[],dsMap={};
+  settings.subjects.forEach(s=>dsMap[s]=[]);
+  const cumData=[];let cumulative=0;
+  for(let i=analyticsRange-1;i>=0;i--){
+    const d=new Date(now);d.setDate(d.getDate()-i);
+    const ds=dateStr(d);
+    const short=analyticsRange<=30?(d.getDate()+'/'+(d.getMonth()+1)):MONTHS[d.getMonth()];
+    labels.push(short);
+    let dayTotal=0;
+    settings.subjects.forEach(subj=>{
+      const v=sum(filtered.filter(s=>s.date===ds&&s.subject===subj));
+      dsMap[subj].push(v);dayTotal+=v;
+    });
+    cumulative+=dayTotal;cumData.push(cumulative);
+  }
+  const legEl=document.getElementById('chart-legend-bar');
+  if(legEl){
+    legEl.style.display=analyticsMode==='bar'?'flex':'none';
+    legEl.innerHTML=settings.subjects.map(s=>{
+      const c=subjectColor(s);
+      return `<span><span class="legend-dot" style="background:${c.c}"></span>${s}</span>`;
+    }).join('');
+  }
+  if(analyticsChart)analyticsChart.destroy();
+  const chartTooltip={backgroundColor:'#1f2021',titleColor:'#e3e2e3',bodyColor:'#b9cacb',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,padding:10,displayColors:false};
+  const xScale={grid:{display:false},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'},autoSkip:analyticsRange>30,maxRotation:45},border:{color:'rgba(255,255,255,0.06)'}};
+  const yScale={grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#849495',font:{size:8,family:'JetBrains Mono'},callback:v=>v>0?fmt(v):''},border:{dash:[3,3],color:'transparent'}};
+  const aCtx=document.getElementById('analytics-chart');
+  if(!aCtx||typeof Chart==='undefined')return;
+  if(analyticsMode==='line'){
+    analyticsChart=new Chart(aCtx,{
+      type:'line',
+      data:{labels,datasets:[{label:'Cumulative',data:cumData,borderColor:'#B8C8D4',backgroundColor:'rgba(184,200,212,0.06)',borderWidth:1.5,pointBackgroundColor:'#B8C8D4',pointBorderColor:'#0F1115',pointBorderWidth:1.5,pointRadius:analyticsRange<=30?2:1,fill:true,tension:0.35}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...chartTooltip,callbacks:{label:ctx=>'Cumulative: '+fmt(ctx.raw)}}},scales:{x:{...xScale},y:{...yScale}}}
+    });
+  } else {
+    analyticsChart=new Chart(aCtx,{
+      type:'bar',
+      data:{labels,datasets:settings.subjects.map((subj)=>{const c=subjectColor(subj);return{label:subj,data:dsMap[subj],backgroundColor:c.bg.replace('0.12','0.65'),borderRadius:1,borderSkipped:false};})},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...chartTooltip,callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},scales:{x:{stacked:true,...xScale},y:{stacked:true,...yScale}}}
+    });
+  }
+  // Student ranking
+  const rankEl=document.getElementById('student-ranking');
+  if(rankEl){
+    const byStudent={};
+    filtered.forEach(s=>{byStudent[s.name]=(byStudent[s.name]||0)+s.amount;});
+    const ranked=Object.entries(byStudent).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    const maxVal=ranked[0]?.[1]||1;
+    rankEl.innerHTML=ranked.length?ranked.map(([name,val])=>`
+      <div class="ranking-bar-row">
+        <div class="ranking-bar-name" ${nameClick(name)}>${escHtml(name)}</div>
+        <div class="ranking-bar-bg"><div class="ranking-bar-fill" style="width:${(val/maxVal*100)}%"></div></div>
+        <div class="ranking-bar-val">${fmt(val)}</div>
+      </div>`).join('')
+      :`<div class="empty" style="padding:16px"><div class="empty-text">No data for this period</div></div>`;
+  }
+  // Heatmap
+  const hmEl=document.getElementById('heatmap-grid');
+  if(hmEl){
+    const today_=new Date();today_.setHours(0,0,0,0);
+    const start=new Date(today_);start.setDate(start.getDate()-363);
+    const startDow=start.getDay();
+    start.setDate(start.getDate()-startDow);
+    const sessionCountMap={};
+    sessions.forEach(s=>{sessionCountMap[s.date]=(sessionCountMap[s.date]||0)+1;});
+    let cells='';
+    for(let i=0;i<364;i++){
+      const d=new Date(start);d.setDate(start.getDate()+i);
+      const ds=dateStr(d);
+      const count=sessionCountMap[ds]||0;
+      const lv=count===0?'':count===1?'lv1':count===2?'lv2':count===3?'lv3':'lv4';
+      cells+=`<div class="heatmap-cell ${lv}" title="${ds}: ${count} session${count!==1?'s':''}"></div>`;
+    }
+    hmEl.innerHTML=cells;
+  }
+  // Breakdowns
+  document.getElementById('subject-breakdown').innerHTML=settings.subjects.map(subj=>{
+    const sc=subjectColor(subj);
+    const ss=filtered.filter(s=>s.subject===subj);
+    return `<div class="breakdown-item">
+      <span class="breakdown-label"><span class="breakdown-dot" style="background:${sc.c}"></span>${subj} <span style="color:var(--text-ter);font-size:10px">(${ss.length})</span></span>
+      <span class="breakdown-value">${fmt(sum(ss))}</span>
+    </div>`;
+  }).join('');
+  const types=['Individual','Group'];
+  document.getElementById('type-breakdown').innerHTML=types.map((type,i)=>{
+    const ss=filtered.filter(s=>s.type===type);
+    const colors=['#64748B','rgba(52,53,54,0.8)'];
+    return `<div class="breakdown-item">
+      <span class="breakdown-label"><span class="breakdown-dot" style="background:${colors[i]}"></span>${type} <span style="color:var(--text-ter);font-size:10px">(${ss.length})</span></span>
+      <span class="breakdown-value">${fmt(sum(ss))}</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 22 — HISTORY (mobile card list)
+// ══════════════════════════════════════════════════════════
+function renderHistory(){
+  const subj=document.getElementById('filter-subject').value;
+  const type=document.getElementById('filter-type').value;
+  const paidFilter=document.getElementById('filter-paid').value;
+  let filtered=sessions;
+  if(subj)filtered=filtered.filter(s=>s.subject===subj);
+  if(type)filtered=filtered.filter(s=>s.type===type);
+  if(paidFilter==='paid')filtered=filtered.filter(s=>s.paid!==false);
+  if(paidFilter==='unpaid')filtered=filtered.filter(s=>s.paid===false);
+  const container=document.getElementById('history-list');
+  if(!filtered.length){
+    container.innerHTML=`<div class="empty"><span class="material-symbols-outlined">history</span><div class="empty-text">No sessions found</div></div>`;
+    return;
+  }
+  container.innerHTML=filtered.map((s,i)=>{
+    const sc=subjectColor(s.subject);
+    const isPaid=s.paid!==false;
+    return `<div class="session-item" style="animation-delay:${Math.min(i,20)*25}ms">
+      <div class="session-avatar" style="background:${sc.bg};color:${sc.c}">${initials(s.name)}</div>
+      <div class="session-info">
+        <div class="session-name" ${nameClick(s.name)}>${escHtml(s.name)}</div>
+        <div class="session-meta">${s.date} · <span class="badge" style="background:${sc.bg};color:${sc.c};padding:1px 5px">${s.subject}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        <div class="session-amount" style="color:${isPaid?'var(--text)':'var(--steel)'}">${fmt(s.amount)}</div>
+        <span class="badge ${isPaid?'badge-paid':'badge-unpaid'}" onclick="togglePaid('${s.id}')">${isPaid?'PAID':'UNPAID'}</span>
+      </div>
+      <button class="session-edit" onclick="openSessionModal('${s.id}')"><span class="material-symbols-outlined">edit</span></button>
+      <button class="session-delete" onclick="deleteSession('${s.id}')"><span class="material-symbols-outlined">delete</span></button>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 23 — REPORT (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function initReportSelectors(){
+  const mSel=document.getElementById('rep-month');
+  const ySel=document.getElementById('rep-year');
+  mSel.innerHTML=MONTHS_F.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  mSel.value=reportMonth;
+  const thisYear=new Date().getFullYear();
+  ySel.innerHTML=Array.from({length:5},(_,i)=>`<option value="${thisYear-i}">${thisYear-i}</option>`).join('');
+  ySel.value=reportYear;
+}
+function renderReport(){
+  reportMonth=parseInt(document.getElementById('rep-month').value);
+  reportYear=parseInt(document.getElementById('rep-year').value);
+  const prefix=`${reportYear}-${String(reportMonth+1).padStart(2,'0')}`;
+  const filtered=sessions.filter(s=>s.date.startsWith(prefix));
+  const paid=filtered.filter(s=>s.paid!==false);
+  const unpaid=filtered.filter(s=>s.paid===false);
+  const statsEl=document.getElementById('report-stats');
+  if(statsEl){
+    statsEl.innerHTML=[
+      {val:fmt(sum(filtered)),lbl:'Total Revenue'},
+      {val:fmt(sum(paid)),lbl:'Paid'},
+      {val:fmt(sum(unpaid)),lbl:'Outstanding',color:'var(--steel)'},
+      {val:[...new Set(filtered.map(s=>s.name))].length,lbl:'Unique Students'},
+    ].map(s=>`<div class="report-stat">
+      <div class="report-stat-val" ${s.color?`style="color:${s.color}"`:''}>${s.val}</div>
+      <div class="report-stat-lbl">${s.lbl}</div>
+    </div>`).join('');
+  }
+  const byStudent={};
+  filtered.forEach(s=>{
+    if(!byStudent[s.name])byStudent[s.name]={total:0,paid:0,unpaid:0,count:0};
+    byStudent[s.name].total+=s.amount;byStudent[s.name].count++;
+    if(s.paid!==false)byStudent[s.name].paid+=s.amount;else byStudent[s.name].unpaid+=s.amount;
+  });
+  const studEl=document.getElementById('report-students');
+  if(studEl){
+    const rows=Object.entries(byStudent).sort((a,b)=>b[1].total-a[1].total);
+    studEl.innerHTML=rows.length?rows.map(([name,info])=>`
+      <div class="report-student-row">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);cursor:pointer" ${nameClick(name)}>${escHtml(name)}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-ter)">${info.count} sessions</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--text)">${fmt(info.total)}</div>
+          ${info.unpaid>0?`<div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--steel)">${fmt(info.unpaid)} unpaid</div>`:''}
+        </div>
+      </div>`).join('')
+      :`<div class="empty"><div class="empty-text">No sessions this month</div></div>`;
+  }
+  const tbody=document.getElementById('report-tbody');
+  if(tbody){
+    tbody.innerHTML=filtered.map(s=>{
+      const sc=subjectColor(s.subject);
+      const isPaid=s.paid!==false;
+      return `<tr>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap">${s.date}</td>
+        <td><strong>${escHtml(s.name)}</strong></td>
+        <td><span class="badge" style="background:${sc.bg};color:${sc.c}">${s.subject}</span></td>
+        <td><span class="badge badge-${s.type.toLowerCase()}">${s.type}</span></td>
+        <td><span class="badge ${isPaid?'badge-paid':'badge-unpaid'}">${isPaid?'PAID':'UNPAID'}</span></td>
+        <td style="text-align:right;font-family:'JetBrains Mono',monospace;font-weight:600;color:${isPaid?'var(--text)':'var(--steel)'}">${fmt(s.amount)}</td>
+      </tr>`;
+    }).join('');
+  }
+}
+function shareReport(){
+  if(navigator.share){
+    navigator.share({title:'Tuition Report',text:`Report for ${MONTHS_F[reportMonth]} ${reportYear}`}).catch(()=>{});
+  } else {
+    window.print();
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 24 — EXPORT / IMPORT (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function exportCSV(){
+  const q=v=>{const s=String(v);return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`:s;};
+  const header=['Date','Student','Subject','Type','Amount','Paid'];
+  const rows=sessions.map(s=>[s.date,s.name,s.subject,s.type,s.amount,s.paid!==false?'yes':'no'].map(q));
+  const csv=[header,...rows].map(r=>r.join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='tuition-sessions.csv';
+  a.click();URL.revokeObjectURL(url);
+  localStorage.setItem('tuition_last_export',Date.now());
+  showToast('export','info','CSV exported','Keep this file as a backup.','download');
+}
+function triggerImportCSV(){document.getElementById('csv-import-input').click();}
+function parseCSVLine(line){
+  const result=[];let cur='',inQuote=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){if(inQuote&&line[i+1]==='"'){cur+='"';i++;}else inQuote=!inQuote;}
+    else if(ch===','&&!inQuote){result.push(cur.trim());cur='';}
+    else{cur+=ch;}
+  }
+  result.push(cur.trim());return result;
+}
+function isValidDate(str){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(str))return false;
+  const d=new Date(str+'T00:00');
+  return !isNaN(d.getTime())&&d.getFullYear()===parseInt(str.slice(0,4))&&d.getMonth()+1===parseInt(str.slice(5,7))&&d.getDate()===parseInt(str.slice(8,10));
+}
+function importCSV(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onerror=function(){showToast('import_err','info','Import failed','Could not read the file.','error');event.target.value='';};
+  reader.onload=function(e){
+    try{
+      const lines=e.target.result.replace(/^\uFEFF/,'').split('\n').map(l=>l.trim()).filter(l=>l);
+      if(!lines.length){toast('Empty file.');return;}
+      const firstCols=parseCSVLine(lines[0]).map(c=>c.toLowerCase());
+      const isHeader=firstCols[0]==='date'&&firstCols[1]==='student'&&firstCols[4]==='amount';
+      const dataLines=isHeader?lines.slice(1):lines;
+      if(!dataLines.length){toast('No data rows found.');return;}
+      const hasPaidCol=parseCSVLine(dataLines[0]).length>=6;
+      let imported=0,skipped=0;
+      const existingIds=new Set(sessions.map(s=>s.date+'|'+s.name+'|'+s.amount));
+      dataLines.forEach(line=>{
+        const cols=parseCSVLine(line);
+        const[date,name,subject,type,amountRaw,paidRaw]=cols;
+        if(!date||!name||!amountRaw){skipped++;return;}
+        if(!isValidDate(date)){skipped++;return;}
+        const amount=parseFloat(amountRaw);
+        if(isNaN(amount)||amount<0){skipped++;return;}
+        const dedupeKey=date+'|'+name+'|'+amount;
+        if(existingIds.has(dedupeKey)){skipped++;return;}
+        let paid;
+        if(!hasPaidCol){paid=false;}
+        else{const p=(paidRaw||'').toLowerCase();paid=p==='yes'||p==='true'||p==='1';}
+        sessions.push({id:uid(),name,date,subject:subject||settings.subjects[0]||'General',type:type||'Individual',amount,paid});
+        existingIds.add(dedupeKey);imported++;
+      });
+      sessions.sort((a,b)=>b.date.localeCompare(a.date));
+      save();renderDashboard();renderHistory();
+      event.target.value='';
+      const warn=!hasPaidCol&&imported>0?' · No Paid column — sessions marked unpaid':'';
+      showToast('import','info','Imported '+imported+' session'+(imported!==1?'s':''),
+        (skipped>0?skipped+' rows skipped (invalid/duplicate)':'All rows imported')+warn,'upload');
+    }catch(err){
+      showToast('import_err','info','Import failed','Check file format.','error');
+      event.target.value='';
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 25 — BACKUP REMINDER (verbatim from v79)
+// ══════════════════════════════════════════════════════════
+function checkBackupReminder(){
+  if(sessions.length<5)return;
+  const last=localStorage.getItem('tuition_last_export');
+  const daysSince=last?(Date.now()-parseInt(last))/86400000:999;
+  if(daysSince>7){const banner=document.getElementById('backup-banner');if(banner)banner.style.display='flex';}
+}
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 26 — PWA: SERVICE WORKER + INSTALL PROMPT
+// ══════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    // Register with explicit scope for GitHub Pages subfolder deployment
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg=>console.log('[PWA] SW registered, scope:', reg.scope))
+      .catch(err=>console.warn('[PWA] SW failed (non-critical):', err.message));
+  });
+}
+
+let deferredPrompt=null;
+let installShownCount=0;
+// iOS (iPhone/iPad) never fires beforeinstallprompt — every iOS browser,
+// including Chrome, is WebKit. Detect it and show manual instructions instead.
+const IS_IOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function isStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+}
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  showInstallBanner();
+});
+function showInstallBanner(){
+  if(installShownCount>0)return;
+  if(isStandalone())return;
+  installShownCount++;
+  const banner=document.getElementById('install-banner');
+  if(banner)banner.classList.add('show');
+}
+// On iOS, show the banner shortly after load since no event will ever fire
+if(IS_IOS&&!isStandalone()){
+  window.addEventListener('load',()=>setTimeout(showInstallBanner,2000));
+}
+document.getElementById('install-btn').addEventListener('click',()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice=>{
+      deferredPrompt=null;
+      const banner=document.getElementById('install-banner');
+      if(banner)banner.classList.remove('show');
+    });
+  } else if(IS_IOS){
+    alert('To install on iPhone/iPad:\n\n1. Open this page in Safari (or Chrome)\n2. Tap the Share button (square with arrow)\n3. Scroll down and tap "Add to Home Screen"\n4. Tap "Add"');
+  } else {
+    alert('To install: tap the ⋮ menu in Chrome then tap "Install app"');
+  }
+});
+// Wire close button on install banner
+const _icb=document.getElementById('install-close-btn');
+if(_icb)_icb.addEventListener('click',()=>{
+  document.getElementById('install-banner').classList.remove('show');
+});
+
+// Track offline
+window.addEventListener('online',()=>document.getElementById('offline-badge').classList.remove('show'));
+window.addEventListener('offline',()=>document.getElementById('offline-badge').classList.add('show'));
+if(!navigator.onLine)document.getElementById('offline-badge').classList.add('show');
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 27 — CALENDAR SWIPE GESTURE
+// ══════════════════════════════════════════════════════════
+(function initCalendarSwipe(){
+  const card=document.getElementById('calendar-card');
+  if(!card)return;
+  let touchStartX=0,touchStartY=0;
+  card.addEventListener('touchstart',e=>{
+    touchStartX=e.touches[0].clientX;
+    touchStartY=e.touches[0].clientY;
+  },{passive:true});
+  card.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-touchStartX;
+    const dy=e.changedTouches[0].clientY-touchStartY;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)){
+      changeMonth(dx<0?1:-1);
+    }
+  },{passive:true});
+})();
+
+// ══════════════════════════════════════════════════════════
+// JS SECTION 28 — INIT
+// ══════════════════════════════════════════════════════════
+window.addEventListener('load',()=>{
+  loadTheme();
+  loadData();
+  rebuildSubjectDropdowns();
+  updateTopbarName();
+  checkSetup();
+  document.getElementById('f-date').value=today();
+  setPaid(false);
+  document.getElementById('app-version').textContent='Tuition Tracker '+APP_VERSION;
+  renderDashboard();
+  checkBackupReminder();
+  // Re-check which class reminders are due every minute and when the app comes back to the foreground
+  setInterval(renderReminders,60000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderReminders();});
+  dismissedSuggestions=JSON.parse(localStorage.getItem('tuition_dismissed_suggestions')||'[]');
+  // Topbar date
+  const d=new Date();
+  const el=document.getElementById('topbar-date');
+  if(el)el.textContent=d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}).toUpperCase();
+});
+
+window.addEventListener('beforeunload',e=>{
+  if(sessions.length>0){
+    e.preventDefault();
+    e.returnValue='Your tuition data is stored locally. Export a CSV backup before leaving.';
+  }
+});
+</script>
+</body>
+</html>
